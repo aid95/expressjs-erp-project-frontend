@@ -34,7 +34,7 @@ function Footer() {
     <Container>
       <List>
         <ListItem>
-          <Link href="#">소개</Link>
+          <Link href="http://www.kmu.ac.kr">계명대학교</Link>
         </ListItem>
       </List>
       <Copyright>
