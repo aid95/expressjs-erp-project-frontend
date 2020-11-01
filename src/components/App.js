@@ -1,6 +1,9 @@
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
+import { HelmetProvider } from "react-helmet-async";
 import { HashRouter as Router } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styled, { ThemeProvider } from "styled-components";
 
 import GlobalStyles from "../Styles/GlobalStyles";
@@ -41,19 +44,22 @@ function App() {
 
   return (
     <ThemeProvider theme={Theme}>
-      <GlobalStyles />
-      <Router>
-        <>
-          <SectionWrapper>
-            <MainWrapper>
-              <Routes isLoggedIn={isLoggedIn} />
-            </MainWrapper>
-            <FooterWrapper>
-              <Footer />
-            </FooterWrapper>
-          </SectionWrapper>
-        </>
-      </Router>
+      <HelmetProvider>
+        <GlobalStyles />
+        <Router>
+          <>
+            <SectionWrapper>
+              <MainWrapper>
+                <Routes isLoggedIn={isLoggedIn} />
+              </MainWrapper>
+              <FooterWrapper>
+                <Footer />
+              </FooterWrapper>
+            </SectionWrapper>
+          </>
+        </Router>
+        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+      </HelmetProvider>
     </ThemeProvider>
   );
 }
