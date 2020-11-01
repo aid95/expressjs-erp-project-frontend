@@ -1,16 +1,37 @@
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { HashRouter as Router } from "react-router-dom";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
+import Footer from "./Footer";
 import Routes from "./Routes";
 
 const QUERY = gql`
   {
     isLoggedIn @client
   }
+`;
+
+const SectionWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100vh;
+`;
+
+const MainWrapper = styled.main`
+  margin: 0 auto;
+  max-width: ${(props) => props.theme.contentMaxWidth};
+  width: 100%;
+  height: 100%;
+`;
+
+const FooterWrapper = styled.footer`
+  margin: 0 auto;
+  max-width: ${(props) => props.theme.footerMaxWidth};
+  width: 100%;
 `;
 
 function App() {
@@ -23,7 +44,14 @@ function App() {
       <GlobalStyles />
       <Router>
         <>
-          <Routes isLoggedIn={isLoggedIn} />
+          <SectionWrapper>
+            <MainWrapper>
+              <Routes isLoggedIn={isLoggedIn} />
+            </MainWrapper>
+            <FooterWrapper>
+              <Footer />
+            </FooterWrapper>
+          </SectionWrapper>
         </>
       </Router>
     </ThemeProvider>
