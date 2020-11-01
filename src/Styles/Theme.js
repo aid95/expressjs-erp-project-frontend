@@ -2,9 +2,12 @@ const BOX_BORDER = "1px solid #e6e6e6";
 const BORDER_RADIUS = "4px";
 
 const Theme = {
+  contentMaxWidth: "1280px",
+  footerMaxWidth: "1060px",
   bgColor: "#FAFAFA",
-  blackColor: "#262626",
-  darkGreyColor: "#999",
+  blackColor: "#444",
+  darkGreyColor: "#777",
+  greenColor: "#32aa46",
   lightGreyColor: "#c7c7c7",
   redColor: "#ED4956",
   blueColor: "#3897f0",
