@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
 import Input from "./Input";
 import { Cat } from "./Icons";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import { ME } from "../SharedQueries";
 import useInput from "../Hooks/useInput";
 

@@ -1,5 +1,5 @@
 import { gql } from "apollo-boost";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import { HelmetProvider } from "react-helmet-async";
 import { HashRouter as Router } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
