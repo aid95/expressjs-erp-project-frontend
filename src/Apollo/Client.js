@@ -10,6 +10,9 @@ const Client = new ApolloClient({
     defaults,
     resolvers,
   },
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+  },
 });
 
 export default Client;
