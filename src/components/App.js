@@ -9,6 +9,7 @@ import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
 import Footer from "./Footer";
+import Header from "./Header";
 import Routes from "./Routes";
 
 const QUERY = gql`
@@ -49,6 +50,7 @@ function App() {
         <Router>
           <>
             <SectionWrapper>
+              <Header />
               <MainWrapper>
                 <Routes isLoggedIn={isLoggedIn} />
               </MainWrapper>
