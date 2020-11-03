@@ -58,7 +58,6 @@ const AuthPresenter = ({
   birthDay,
   setAction,
   onSubmit,
-  secret,
 }) => (
   <Wrapper>
     <Form>
@@ -90,34 +89,21 @@ const AuthPresenter = ({
           </form>
         </>
       )}
-      {action === "confirm" && (
-        <>
-          <Helmet>
-            <title>Confirm Secret | Prismagram</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <Input placeholder="Paste your secret" required {...secret} />
-            <Button text={"Confirm"} />
-          </form>
-        </>
-      )}
     </Form>
 
-    {action !== "confirm" && (
-      <StateChanger>
-        {action === "logIn" ? (
-          <>
-            Don't have an account?{" "}
-            <Link onClick={() => setAction("signUp")}>Sign up</Link>
-          </>
-        ) : (
-          <>
-            Have an account?{" "}
-            <Link onClick={() => setAction("logIn")}>Log in</Link>
-          </>
-        )}
-      </StateChanger>
-    )}
+    <StateChanger>
+      {action === "logIn" ? (
+        <>
+          Don't have an account?{" "}
+          <Link onClick={() => setAction("signUp")}>Sign up</Link>
+        </>
+      ) : (
+        <>
+          Have an account?{" "}
+          <Link onClick={() => setAction("logIn")}>Log in</Link>
+        </>
+      )}
+    </StateChanger>
   </Wrapper>
 );
 

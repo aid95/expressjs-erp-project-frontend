@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AuthPresenter from "./AuthPresenter";
 import useInput from "../../Hooks/useInput";
 import { useMutation } from "@apollo/client";
@@ -6,7 +6,6 @@ import { LOG_IN, CREATE_ACCOUNT, LOCAL_LOG_IN } from "./AuthQueries";
 import { toast } from "react-toastify";
 
 const AuthContainer = () => {
-  const [submitting, setSubmitting] = useState(false);
   const [action, setAction] = useState("logIn");
 
   const username = useInput("");
@@ -14,7 +13,6 @@ const AuthContainer = () => {
   const firstName = useInput("");
   const lastName = useInput("");
   const birthDay = useInput("");
-  const secret = useInput("");
   const email = useInput("");
 
   const [createAccountMutation] = useMutation(CREATE_ACCOUNT, {
@@ -35,7 +33,6 @@ const AuthContainer = () => {
   const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
   const onSubmit = async (e) => {
-    setSubmitting(true);
     e.preventDefault();
     if (action === "logIn") {
       if (username.value !== "" && password.value !== "") {
@@ -83,12 +80,6 @@ const AuthContainer = () => {
     }
   };
 
-  useEffect(() => {
-    if (submitting) {
-      setSubmitting(false);
-    }
-  }, []);
-
   return (
     <AuthPresenter
       setAction={setAction}
@@ -99,7 +90,6 @@ const AuthContainer = () => {
       lastName={lastName}
       birthDay={birthDay}
       email={email}
-      secret={secret}
       onSubmit={onSubmit}
     />
   );
