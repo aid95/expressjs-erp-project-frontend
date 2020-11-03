@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
@@ -53,47 +53,41 @@ const EUsername = styled.span`
   padding: 0px 10px;
 `;
 
-const Header = withRouter(({ history }) => {
+const Header = ({ history }) => {
   const search = useInput("");
   const { loading, data } = useQuery(ME);
 
-  console.log(loading, data);
+  return (
+    <Container>
+      <Wrapper>
+        <HeaderColumn>
+          <Link to="/">
+            <Cat />
+          </Link>
+        </HeaderColumn>
+        {!loading && !!data.me ? (
+          <>
+            <HeaderColumn>
+              <SearchInput
+                value={search.value}
+                onChange={search.onChange}
+                placeholder="Search"
+              />
+            </HeaderColumn>
+            <HeaderColumn>
+              <ProfileImage
+                src="https://www.w3schools.com/howto/img_avatar2.png"
+                alt="profile image"
+              />
+              <EUsername>{data.me.username}님 환영합니다.</EUsername>
+            </HeaderColumn>
+          </>
+        ) : (
+          <></>
+        )}
+      </Wrapper>
+    </Container>
+  );
+};
 
-  if (loading) {
-    return "loading...";
-  } else {
-    return (
-      <Container>
-        <Wrapper>
-          <HeaderColumn>
-            <Link to="/">
-              <Cat />
-            </Link>
-          </HeaderColumn>
-          {!!data.me ? (
-            <>
-              <HeaderColumn>
-                <SearchInput
-                  value={search.value}
-                  onChange={search.onChange}
-                  placeholder="Search"
-                />
-              </HeaderColumn>
-              <HeaderColumn>
-                <ProfileImage
-                  src="https://www.w3schools.com/howto/img_avatar2.png"
-                  alt="profile image"
-                />
-                <EUsername>{data.me.username}님 환영합니다.</EUsername>
-              </HeaderColumn>
-            </>
-          ) : (
-            <></>
-          )}
-        </Wrapper>
-      </Container>
-    );
-  }
-});
-
-export default Header;
+export default withRouter(Header);

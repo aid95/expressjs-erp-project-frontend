@@ -50,7 +50,7 @@ function App() {
         <Router>
           <>
             <SectionWrapper>
-              <Header />
+              {isLoggedIn && <Header />}
               <MainWrapper>
                 <Routes isLoggedIn={isLoggedIn} />
               </MainWrapper>
