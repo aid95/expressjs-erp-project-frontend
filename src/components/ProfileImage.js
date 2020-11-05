@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Container = styled.img`
-  border-radius: ${(props) => props.radius || 0}px;
+  border-radius: ${(props) => props.radius || 0}%;
   height: auto;
   width: auto;
   max-width: ${(props) => props.width}px;
