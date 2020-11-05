@@ -2,9 +2,9 @@ import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 export default createGlobalStyle`
-  ${reset};
-
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
+
+  ${reset};
 
   * {
     box-sizing: border-box;

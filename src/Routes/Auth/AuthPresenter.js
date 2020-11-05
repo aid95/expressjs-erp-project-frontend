@@ -64,7 +64,7 @@ const AuthPresenter = ({
       {action === "logIn" && (
         <>
           <Helmet>
-            <title>Log In | Prismagram</title>
+            <title>Log In | ERP Monitor</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <Input placeholder={"Username"} {...username} />
@@ -76,7 +76,7 @@ const AuthPresenter = ({
       {action === "signUp" && (
         <>
           <Helmet>
-            <title>Sign Up | Prismagram</title>
+            <title>Sign Up | ERP Monitor</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <Input placeholder={"Email"} {...email} type="email" />
