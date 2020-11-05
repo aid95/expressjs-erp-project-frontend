@@ -47,6 +47,10 @@ const SearchInput = styled(Input)`
   }
 `;
 
+const Form = styled.form`
+  width: 100%;
+`;
+
 const EUsername = styled.span`
   font-size: 12px;
   font-weight: 600;
@@ -56,6 +60,10 @@ const EUsername = styled.span`
 const Header = ({ history }) => {
   const search = useInput("");
   const { loading, data } = useQuery(ME);
+  const onSearchSubmit = (e) => {
+    e.preventDefault();
+    history.push(`/search?term=${search.value}`);
+  };
 
   return (
     <Container>
@@ -68,11 +76,13 @@ const Header = ({ history }) => {
         {!loading && !!data.me ? (
           <>
             <HeaderColumn>
-              <SearchInput
-                value={search.value}
-                onChange={search.onChange}
-                placeholder="Search"
-              />
+              <Form onSubmit={onSearchSubmit}>
+                <SearchInput
+                  value={search.value}
+                  onChange={search.onChange}
+                  placeholder="Search"
+                />
+              </Form>
             </HeaderColumn>
             <HeaderColumn>
               <ProfileImage
