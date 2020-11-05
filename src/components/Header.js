@@ -86,7 +86,7 @@ const Header = ({ history }) => {
             </HeaderColumn>
             <HeaderColumn>
               <ProfileImage
-                src="https://www.w3schools.com/howto/img_avatar2.png"
+                src="https://scontent-nrt1-1.xx.fbcdn.net/v/t1.0-1/p148x148/104424755_3039633629484044_5461704554360702412_n.jpg?_nc_cat=101&ccb=2&_nc_sid=1eb0c7&_nc_ohc=tnW7u5R3wPMAX--esRG&_nc_ht=scontent-nrt1-1.xx&tp=6&oh=2e2fe9b80e599da46b8299464dd1aa48&oe=5FC7DEF4"
                 alt="profile image"
               />
               <EUsername>{data.me.username}님 환영합니다.</EUsername>

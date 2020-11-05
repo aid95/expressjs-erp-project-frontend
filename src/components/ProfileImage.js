@@ -11,8 +11,8 @@ const Container = styled.img`
 `;
 
 const ProfileImage = ({
-  width = 25,
-  height = 25,
+  width = 24,
+  height = 24,
   src,
   alt,
   radius = 50,

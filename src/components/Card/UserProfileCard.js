@@ -12,7 +12,7 @@ const Card = styled.div`
   max-width: 230px;
   background-color: white;
   margin: 10px;
-  border-radius: 5px;
+  border-radius: ${(props) => props.theme.borderRadius};
 `;
 
 const FullNameField = styled.span`
