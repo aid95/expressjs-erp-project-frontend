@@ -4,9 +4,9 @@ import ProfilePresenter from "./ProfilePresenter";
 const ProfileContainer = () => {
   return (
     <ProfilePresenter
-      fullName={"Byeongju Shin"}
+      fullName={"신 병주"}
       email={"juraffe@github.com"}
-      department={"S/W engineer"}
+      department={"S/W 개발자"}
       rank={"CTO"}
       username={"juraffe"}
       birthDay={"1995-12-06"}
