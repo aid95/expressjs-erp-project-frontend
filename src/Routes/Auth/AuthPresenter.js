@@ -5,12 +5,10 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 
 const Wrapper = styled.div`
-  min-height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100%;
 `;
 
 const Box = styled.div`

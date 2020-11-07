@@ -22,7 +22,7 @@ const SectionWrapper = styled.section`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  height: 100vh;
+  height: 100%;
 `;
 
 const MainWrapper = styled.main`
@@ -30,6 +30,7 @@ const MainWrapper = styled.main`
   max-width: ${(props) => props.theme.contentMaxWidth};
   width: 100%;
   height: 100%;
+  min-height: 80vh;
 `;
 
 const FooterWrapper = styled.footer`
