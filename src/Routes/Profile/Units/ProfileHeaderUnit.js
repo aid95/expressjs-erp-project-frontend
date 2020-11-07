@@ -55,7 +55,7 @@ const FullNameDeco = styled.p`
 `;
 
 const SubTextDeco = styled.p`
-  font-size: ${(props) => props.size || 16}px;
+  font-size: ${(props) => props.size || 13}px;
   font-weight: 200;
 
   display: flex;
@@ -131,7 +131,7 @@ const ProfileHeaderUnit = ({
             <UserInfoWrapper>
               <FullNameDeco>
                 {fullName}&nbsp;&nbsp;
-                <BadgeSubTextDeco>
+                <BadgeSubTextDeco size={14}>
                   {rank} · {department}
                 </BadgeSubTextDeco>
               </FullNameDeco>
