@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
 import Input from "./Input";
 import { Cat } from "./Icons";
-import { useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { ME } from "../SharedQueries";
 import useInput from "../Hooks/useInput";
 
@@ -47,6 +47,12 @@ const SearchInput = styled(Input)`
   }
 `;
 
+const LogOutLink = styled.span`
+  color: ${(props) => props.theme.blueColor};
+  cursor: pointer;
+  font-size: 12px;
+`;
+
 const Form = styled.form`
   width: 100%;
 `;
@@ -57,6 +63,12 @@ const EUsername = styled.span`
   padding: 0px 10px;
 `;
 
+const LOG_OUT = gql`
+  mutation logUserOut {
+    logUserOut @client
+  }
+`;
+
 const Header = ({ history }) => {
   const search = useInput("");
   const { loading, data } = useQuery(ME);
@@ -64,6 +76,7 @@ const Header = ({ history }) => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
   };
+  const [logOut] = useMutation(LOG_OUT);
 
   return (
     <Container>
@@ -90,6 +103,7 @@ const Header = ({ history }) => {
                 alt="profile image"
               />
               <EUsername>{data.me.username}님 환영합니다.</EUsername>
+              <LogOutLink onClick={logOut}>로그아웃</LogOutLink>
             </HeaderColumn>
           </>
         ) : (
