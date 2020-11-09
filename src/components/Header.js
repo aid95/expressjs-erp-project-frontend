@@ -14,6 +14,7 @@ const Container = styled.header`
   align-items: center;
   padding: 15px 0px;
   width: 100%;
+  margin-bottom: 20px;
   border-bottom: ${(props) => props.theme.boxBorder};
 `;
 
