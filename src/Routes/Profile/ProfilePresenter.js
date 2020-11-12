@@ -2,8 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import ProfileHeaderUnit from "./Units/ProfileHeaderUnit";
-import { ContentList, ContentListItemComp } from "../../Components/ContentList";
-import PayStub from "../../Components/Document/PayStub";
+import ProfileContentUnit from "./Units/ProfileContentUnit";
 
 const Container = styled.div`
   width: 100%;
@@ -29,82 +28,56 @@ const MenubarListItem = styled.li`
     props.selected === true ? `2px solid #32aa46` : "none"};
 `;
 
-// Content CSS
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  background-color: white;
-  padding: 10px;
-  border-radius: ${(props) => props.theme.borderRadius};
-
-  padding: 20px;
+const SubMenuLink = styled.a`
+  color: ${(props) => props.theme.blackColor};
+  cursor: pointer;
 `;
 
-const ContentTitle = styled.p`
-  font-size: 24px;
-  font-weight: 400;
-  margin-bottom: 10px;
-`;
+const ProfilePresenter = ({ subMenuState }) => {
+  //
+  const { setSubMenu, subMenu } = subMenuState;
 
-const ContentListWrapper = styled.div`
-  width: 28%;
-`;
+  return (
+    <Container>
+      <Helmet>
+        <title>Profile | ERP Monitor</title>
+      </Helmet>
 
-const ContentDetail = styled.div`
-  width: 72%;
-`;
+      <ProfileHeaderUnit />
 
-const ProfilePresenter = ({
-  fullName,
-  username,
-  email,
-  phoneNumber,
-  birthDay,
-  department,
-  rank,
-}) => (
-  <Container>
-    <Helmet>
-      <title>Profile | ERP Monitor</title>
-    </Helmet>
+      <MenubarWrapper>
+        <MenubarList>
+          <SubMenuLink onClick={() => setSubMenu("defaultMenu")}>
+            <MenubarListItem selected={subMenu === "defaultMenu"}>
+              업무
+            </MenubarListItem>
+          </SubMenuLink>
+          <SubMenuLink onClick={() => setSubMenu("payStubMenu")}>
+            <MenubarListItem selected={subMenu === "payStubMenu"}>
+              급여
+            </MenubarListItem>
+          </SubMenuLink>
+          <SubMenuLink onClick={() => setSubMenu("docsMenu")}>
+            <MenubarListItem selected={subMenu === "docsMenu"}>
+              결재
+            </MenubarListItem>
+          </SubMenuLink>
+          <SubMenuLink onClick={() => setSubMenu("mailMenu")}>
+            <MenubarListItem selected={subMenu === "mailMenu"}>
+              쪽지
+            </MenubarListItem>
+          </SubMenuLink>
+          <SubMenuLink onClick={() => setSubMenu("chatMenu")}>
+            <MenubarListItem selected={subMenu === "chatMenu"}>
+              채팅
+            </MenubarListItem>
+          </SubMenuLink>
+        </MenubarList>
+      </MenubarWrapper>
 
-    <ProfileHeaderUnit
-      fullName={fullName}
-      username={username}
-      email={email}
-      phoneNumber={phoneNumber}
-      birthDay={birthDay}
-      department={department}
-      rank={rank}
-    />
-
-    <MenubarWrapper>
-      <MenubarList>
-        <MenubarListItem selected={false}>업무</MenubarListItem>
-        <MenubarListItem selected={true}>급여</MenubarListItem>
-        <MenubarListItem selected={false}>결재</MenubarListItem>
-        <MenubarListItem selected={false}>쪽지</MenubarListItem>
-        <MenubarListItem selected={false}>채팅</MenubarListItem>
-      </MenubarList>
-    </MenubarWrapper>
-
-    <ContentWrapper>
-      <ContentListWrapper>
-        <ContentTitle>목록</ContentTitle>
-        <ContentList>
-          <ContentListItemComp
-            emoji={"💵"}
-            title={"2020년 09월 급여 명세서"}
-            subtext={"2020년 10월 02일 작성 됨"}
-          />
-        </ContentList>
-      </ContentListWrapper>
-      <ContentDetail>
-        <PayStub />
-      </ContentDetail>
-    </ContentWrapper>
-  </Container>
-);
+      <ProfileContentUnit menuName={subMenu} />
+    </Container>
+  );
+};
 
 export default ProfilePresenter;

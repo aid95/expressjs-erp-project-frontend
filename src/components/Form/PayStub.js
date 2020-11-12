@@ -25,8 +25,8 @@ const PayStubAmountWrapper = styled.ul`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 40px;
-  margin-bottom: 50px;
+  padding-bottom: 70px;
+  margin-bottom: 70px;
   border-bottom: 1px solid #e6e6e675;
 `;
 
@@ -164,16 +164,16 @@ const PayStub = () => {
           <PayStubDetailLeft>
             <PayStubDetailList>
               <PayStubDetailItem>
-                <PayStubDetailItemHead>총 합</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemHead></PayStubDetailItemHead>
+                <PayStubDetailItemText></PayStubDetailItemText>
               </PayStubDetailItem>
             </PayStubDetailList>
           </PayStubDetailLeft>
           <PayStubDetailRight>
             <PayStubDetailList>
               <PayStubDetailItem>
-                <PayStubDetailItemHead>총 합</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemHead></PayStubDetailItemHead>
+                <PayStubDetailItemText></PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead></PayStubDetailItemHead>

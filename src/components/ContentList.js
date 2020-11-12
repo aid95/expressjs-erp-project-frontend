@@ -27,6 +27,7 @@ const ContentListItemTitle = styled.p`
   font-size: 21px;
   font-weight: 400;
   margin-bottom: 8px;
+  cursor: pointer;
 `;
 
 const ContentListItemSubText = styled.span`
@@ -35,11 +36,13 @@ const ContentListItemSubText = styled.span`
   margin-top: 8px;
 `;
 
-export const ContentListItemComp = ({ emoji, title, subtext }) => (
+export const ContentListItemComp = ({ id, emoji, title, subtext, onClick }) => (
   <ContentListItem>
     <ContentListItemThumbnailWrapper>{emoji}</ContentListItemThumbnailWrapper>
     <ContentListItemInfoWrapper>
-      <ContentListItemTitle>{title}</ContentListItemTitle>
+      <ContentListItemTitle id={id} onClick={onClick}>
+        {title}
+      </ContentListItemTitle>
       <ContentListItemSubText>{subtext}</ContentListItemSubText>
     </ContentListItemInfoWrapper>
   </ContentListItem>
