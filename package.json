@@ -20,6 +20,7 @@
     "react-toastify": "^6.0.9",
     "styled-components": "^5.2.1",
     "styled-reset": "^4.3.0",
+    "subscriptions-transport-ws": "^0.9.18",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
