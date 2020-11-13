@@ -4,6 +4,7 @@ import useInput from "../../Hooks/useInput";
 import { useMutation } from "@apollo/client";
 import { LOG_IN, CREATE_ACCOUNT, LOCAL_LOG_IN } from "./AuthQueries";
 import { toast } from "react-toastify";
+import { logUserIn } from "../../utils";
 
 const AuthContainer = () => {
   const [action, setAction] = useState("logIn");
@@ -42,7 +43,7 @@ const AuthContainer = () => {
           } = await logInMutation();
 
           if (token !== "" && token !== undefined) {
-            localLogInMutation({ variables: { token } });
+            logUserIn(token);
           } else {
             throw Error();
           }

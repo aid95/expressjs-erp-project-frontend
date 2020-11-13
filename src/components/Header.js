@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
 import Input from "./Input";
 import { Cat } from "./Icons";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
 import { ME } from "../SharedQueries";
 import useInput from "../Hooks/useInput";
+import { toast } from "react-toastify";
+import { logUserOut } from "../utils";
 
 const Container = styled.header`
   display: flex;
@@ -77,7 +79,6 @@ const Header = ({ history }) => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
   };
-  const [logOut] = useMutation(LOG_OUT);
 
   return (
     <Container>
@@ -87,7 +88,7 @@ const Header = ({ history }) => {
             <Cat />
           </Link>
         </HeaderColumn>
-        {!loading && !!data.me ? (
+        {!loading && data && data.me ? (
           <>
             <HeaderColumn>
               <Form onSubmit={onSearchSubmit}>
@@ -104,7 +105,8 @@ const Header = ({ history }) => {
                 alt="profile image"
               />
               <EUsername>{data.me.username}님 환영합니다.</EUsername>
-              <LogOutLink onClick={logOut}>로그아웃</LogOutLink>
+              <LogOutLink onClick={logUserOut}>로그아웃</LogOutLink>
+              <NewMailNotify userId={data.me.id} />
             </HeaderColumn>
           </>
         ) : (
