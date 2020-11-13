@@ -11,6 +11,7 @@ import Theme from "../Styles/Theme";
 import Footer from "./Footer";
 import Header from "./Header";
 import Routes from "./Routes";
+import { isLoggedIn } from "../utils";
 
 const QUERY = gql`
   {
@@ -40,9 +41,7 @@ const FooterWrapper = styled.footer`
 `;
 
 function App() {
-  const {
-    data: { isLoggedIn },
-  } = useQuery(QUERY);
+  const isLoggedInFlag = isLoggedIn();
 
   return (
     <ThemeProvider theme={Theme}>
@@ -51,9 +50,9 @@ function App() {
         <Router>
           <>
             <SectionWrapper>
-              {isLoggedIn && <Header />}
+              {isLoggedInFlag && <Header />}
               <MainWrapper>
-                <Routes isLoggedIn={isLoggedIn} />
+                <Routes isLoggedIn={isLoggedInFlag} />
               </MainWrapper>
               <FooterWrapper>
                 <Footer />

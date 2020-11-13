@@ -66,11 +66,34 @@ const EUsername = styled.span`
   padding: 0px 10px;
 `;
 
-const LOG_OUT = gql`
-  mutation logUserOut {
-    logUserOut @client
+const NEW_MAIL_SUBSCRIPTION = gql`
+  subscription notifyNewMail($id: String!) {
+    notifyNewMail(id: $id) {
+      id
+      subject
+    }
   }
 `;
+
+const NewMailNotify = ({ userId }) => {
+  console.log("Header");
+  const { loading, error, data } = useSubscription(NEW_MAIL_SUBSCRIPTION, {
+    variables: {
+      id: userId,
+    },
+    fetchPolicy: "network-only",
+  });
+
+  const alert = () => {
+    if (!loading) {
+      toast.info(data.notifyNewMail.subject);
+    }
+  };
+
+  useMemo(() => alert(), [data]);
+
+  return <></>;
+};
 
 const Header = ({ history }) => {
   const search = useInput("");
