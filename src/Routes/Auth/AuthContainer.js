@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AuthPresenter from "./AuthPresenter";
 import useInput from "../../Hooks/useInput";
 import { useMutation } from "@apollo/client";
-import { LOG_IN, CREATE_ACCOUNT, LOCAL_LOG_IN } from "./AuthQueries";
+import { LOG_IN, CREATE_ACCOUNT } from "./AuthQueries";
 import { toast } from "react-toastify";
 import { logUserIn } from "../../utils";
 
@@ -30,8 +30,6 @@ const AuthContainer = () => {
   const [logInMutation] = useMutation(LOG_IN, {
     variables: { username: username.value, password: password.value },
   });
-
-  const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
   const onSubmit = async (e) => {
     e.preventDefault();
