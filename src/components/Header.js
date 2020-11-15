@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
 import Input from "./Input";
 import { Cat } from "./Icons";
-import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import { ME } from "../SharedQueries";
 import useInput from "../Hooks/useInput";
 import { toast } from "react-toastify";
@@ -23,7 +23,6 @@ const Container = styled.header`
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-around;
-
   width: 100%;
   max-width: ${(props) => props.theme.contentMaxWidth};
 `;
@@ -62,7 +61,7 @@ const Form = styled.form`
 
 const EUsername = styled.span`
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   padding: 0px 10px;
 `;
 
@@ -76,8 +75,7 @@ const NEW_MAIL_SUBSCRIPTION = gql`
 `;
 
 const NewMailNotify = ({ userId }) => {
-  console.log("Header");
-  const { loading, error, data } = useSubscription(NEW_MAIL_SUBSCRIPTION, {
+  const { loading, data } = useSubscription(NEW_MAIL_SUBSCRIPTION, {
     variables: {
       id: userId,
     },
@@ -86,7 +84,7 @@ const NewMailNotify = ({ userId }) => {
 
   const alert = () => {
     if (!loading) {
-      toast.info(data.notifyNewMail.subject);
+      toast(data.notifyNewMail.subject);
     }
   };
 

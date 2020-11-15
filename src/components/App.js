@@ -60,7 +60,11 @@ function App() {
             </SectionWrapper>
           </>
         </Router>
-        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+        <ToastContainer
+          position={toast.POSITION.TOP_RIGHT}
+          autoClose={2500}
+          hideProgressBar={true}
+        />
       </HelmetProvider>
     </ThemeProvider>
   );
