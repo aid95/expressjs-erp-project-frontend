@@ -27,11 +27,14 @@ const DocTitle = styled.p`
 
 const DocContentWrapper = styled.div`
   padding: 20px;
+  font-size: 16px;
+  border-bottom: 1px solid #e6e6e675;
 `;
 
 const ApproversWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 20px;
 `;
 
 const ApproversList = styled.ul`
@@ -39,16 +42,23 @@ const ApproversList = styled.ul`
 `;
 
 const ApproversItem = styled.li`
-  &:not(:last-child) {
-    content: " >> ";
-  }
+  border-radius: 5px;
+  background-color: ${(props) =>
+    props.isPass === true ? props.theme.blueColor : props.theme.darkGreyColor};
+  padding: 3px 5px;
+  font-size: 11px;
+  color: #fff;
+`;
+
+const ApprovalDocSubText = styled.p`
+  padding: 20px;
 `;
 
 const DocFootWrapper = styled.div``;
 
 const ApproveDoc = (data) => {
   const {
-    data: { id, subject, content, createdAt, approvers },
+    data: { id, subject, drafter, content, createdAt, approvers },
   } = data;
 
   return (
@@ -60,12 +70,19 @@ const ApproveDoc = (data) => {
         <DocTitle>제목 : {subject}</DocTitle>
       </DocTitleWrapper>
       <DocContentWrapper>{content}</DocContentWrapper>
+      <ApprovalDocSubText>
+        기안자&nbsp;:&nbsp;{drafter.username}
+      </ApprovalDocSubText>
       <ApproversWrapper>
+        결재자&nbsp;:&nbsp;
         <ApproversList>
-          {approvers.map(({ approver }) => {
-            console.log(approver);
+          {approvers.map(({ approver, isPass }) => {
             const { username, rank, department } = approver;
-            return <ApproversItem>{username}</ApproversItem>;
+            return (
+              <ApproversItem key={id} isPass={isPass}>
+                {username}
+              </ApproversItem>
+            );
           })}
         </ApproversList>
       </ApproversWrapper>

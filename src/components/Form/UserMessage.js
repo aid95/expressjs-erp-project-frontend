@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import ProfileImage from "../../Components/ProfileImage";
-
 const UserMsgContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -13,7 +11,7 @@ const UserMsgProfileWrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
   padding: 20px;
-  border-top: 1px solid #e6e6e675;
+  border-bottom: 1px solid #e6e6e675;
 `;
 
 const FullNameDeco = styled.p`
@@ -57,15 +55,14 @@ const UserMsgTitleWrapper = styled.div`
 `;
 
 const UserMsgTitle = styled.h1`
-  font-size: 24px;
-  font-weight: 200;
+  font-size: 18px;
 `;
 
 const UserInfoHeadWrapper = styled.div``;
 
 const UserMsgContent = styled.div`
   padding: 20px;
-  min-height: 500px;
+  font-size: 16px;
 `;
 
 const UserMessage = (data) => {
@@ -81,10 +78,6 @@ const UserMessage = (data) => {
   return (
     <>
       <UserMsgContainer>
-        <UserMsgTitleWrapper>
-          <UserMsgTitle>{subject}</UserMsgTitle>
-        </UserMsgTitleWrapper>
-        <UserMsgContent>{content}</UserMsgContent>
         <UserMsgProfileWrapper>
           <UserInfoHeadWrapper>
             <UserInfoHead>
@@ -95,6 +88,10 @@ const UserMessage = (data) => {
             </UserInfoHead>
           </UserInfoHeadWrapper>
         </UserMsgProfileWrapper>
+        <UserMsgTitleWrapper>
+          <UserMsgTitle>제목 : {subject}</UserMsgTitle>
+        </UserMsgTitleWrapper>
+        <UserMsgContent>{content}</UserMsgContent>
       </UserMsgContainer>
     </>
   );
