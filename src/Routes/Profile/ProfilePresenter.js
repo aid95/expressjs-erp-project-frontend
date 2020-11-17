@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import ProfileHeaderUnit from "./Units/ProfileHeaderUnit";
 import ProfileContentUnit from "./Units/ProfileContentUnit";
+import { SEE_DOC_APPROVALS, SEE_FULL_DOC_APPROVAL } from "./ProfileQueries";
 
 const Container = styled.div`
   width: 100%;

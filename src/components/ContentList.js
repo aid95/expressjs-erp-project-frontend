@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { isLoggedIn } from "../utils";
 
 export const ContentList = styled.ul`
   display: flex;
@@ -10,7 +11,7 @@ const ContentListItem = styled.li`
   display: flex;
   align-items: center;
   padding: 15px 10px;
-
+  background-color: ${(props) => (props.isSelected ? "#adb3" : "#fff")};
   &:not(:last-child) {
     border-bottom: 1px solid #0000000f;
   }
@@ -36,8 +37,15 @@ const ContentListItemSubText = styled.span`
   margin-top: 8px;
 `;
 
-export const ContentListItemComp = ({ id, emoji, title, subtext, onClick }) => (
-  <ContentListItem>
+export const ContentListItemComp = ({
+  id,
+  emoji,
+  title,
+  subtext,
+  onClick,
+  isSelected,
+}) => (
+  <ContentListItem isSelected={isSelected}>
     <ContentListItemThumbnailWrapper>{emoji}</ContentListItemThumbnailWrapper>
     <ContentListItemInfoWrapper>
       <ContentListItemTitle id={id} onClick={onClick}>

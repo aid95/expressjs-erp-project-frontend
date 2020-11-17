@@ -1,9 +1,12 @@
 import { gql } from "apollo-boost";
 
-export const SEE_MAIL = gql`
+export const SEE_MAILS = gql`
   {
     seeMail {
       id
+      from {
+        username
+      }
       subject
       content
       createdAt
@@ -30,11 +33,14 @@ export const SEE_FULL_MAIL = gql`
   }
 `;
 
-export const SEE_DOC_APPROVAL = gql`
+export const SEE_DOC_APPROVALS = gql`
   {
     seeDocApproval {
       id
       subject
+      drafter {
+        username
+      }
       createdAt
     }
   }
@@ -44,6 +50,9 @@ export const SEE_FULL_DOC_APPROVAL = gql`
   query seeFullDocApproval($id: String!) {
     seeFullDocApproval(id: $id) {
       id
+      drafter {
+        username
+      }
       subject
       content
       createdAt
@@ -58,6 +67,43 @@ export const SEE_FULL_DOC_APPROVAL = gql`
           }
         }
         isPass
+      }
+    }
+  }
+`;
+
+export const SEE_DAILY_JOURNALS = gql`
+  {
+    dailyJournals {
+      id
+      createdAt
+    }
+  }
+`;
+
+export const SEE_FULL_DAILY_JOURNAL = gql`
+  query dailyJournal($id: String!) {
+    dailyJournal(id: $id) {
+      id
+      createdAt
+      user {
+        id
+        username
+      }
+      tasks {
+        id
+        comment
+        beginDateTime
+        endDateTime
+        category {
+          title
+          parentCategory {
+            title
+            parentCategory {
+              title
+            }
+          }
+        }
       }
     }
   }

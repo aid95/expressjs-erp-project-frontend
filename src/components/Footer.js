@@ -23,10 +23,12 @@ const ListItem = styled.li`
 
 const Link = styled.a`
   color: ${(props) => props.theme.blackColor};
+  font-weight: 200;
 `;
 
 const Copyright = styled.span`
   color: ${(props) => props.theme.darkGreyColor};
+  font-weight: 200;
 `;
 
 function Footer() {
