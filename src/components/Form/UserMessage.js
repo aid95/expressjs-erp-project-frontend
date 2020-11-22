@@ -71,7 +71,6 @@ const UserMessage = (data) => {
       subject,
       content,
       from: { fullName, rank, department },
-      createdAt,
     },
   } = data;
 

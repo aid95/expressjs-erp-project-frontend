@@ -1,5 +1,3 @@
-import { gql } from "apollo-boost";
-import { useQuery } from "@apollo/client";
 import { HelmetProvider } from "react-helmet-async";
 import { HashRouter as Router } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,12 +10,6 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Routes from "./Routes";
 import { isLoggedIn } from "../utils";
-
-const QUERY = gql`
-  {
-    isLoggedIn @client
-  }
-`;
 
 const SectionWrapper = styled.section`
   display: flex;

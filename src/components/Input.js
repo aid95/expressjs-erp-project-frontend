@@ -12,6 +12,16 @@ const Container = styled.input`
   padding: 0px 15px;
 `;
 
+const MultilineContainer = styled.textarea`
+  border: 0;
+  border: ${(props) => props.theme.boxBorder};
+  border-radius: ${(props) => props.theme.borderRadius};
+  background-color: ${(props) => props.theme.bgColor};
+  height: 300px;
+  font-size: 12px;
+  padding: 15px;
+`;
+
 const Input = ({
   placeholder,
   required = true,
@@ -36,6 +46,38 @@ Input.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
+};
+
+export const MultiLineInput = ({
+  placeholder,
+  required = true,
+  value,
+  onChange,
+  type = "text",
+  className,
+  col = 200,
+  row = 3,
+}) => (
+  <MultilineContainer
+    className={className}
+    placeholder={placeholder}
+    required={required}
+    value={value}
+    onChange={onChange}
+    type={type}
+    col={col}
+    row={row}
+  />
+);
+
+MultiLineInput.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  required: PropTypes.bool,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  col: PropTypes.number,
+  row: PropTypes.number,
 };
 
 export default Input;

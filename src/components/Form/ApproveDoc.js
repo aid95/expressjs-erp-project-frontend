@@ -58,7 +58,7 @@ const DocFootWrapper = styled.div``;
 
 const ApproveDoc = (data) => {
   const {
-    data: { id, subject, drafter, content, createdAt, approvers },
+    data: { id, subject, drafter, content, approvers },
   } = data;
 
   return (
@@ -77,7 +77,7 @@ const ApproveDoc = (data) => {
         결재자&nbsp;:&nbsp;
         <ApproversList>
           {approvers.map(({ approver, isPass }) => {
-            const { username, rank, department } = approver;
+            const { username } = approver;
             return (
               <ApproversItem key={id} isPass={isPass}>
                 {username}
