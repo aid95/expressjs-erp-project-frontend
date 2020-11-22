@@ -17,3 +17,13 @@ export const ME = gql`
     }
   }
 `;
+
+export const SEARCH_USERS = gql`
+  query searchUser($term: String!) {
+    searchUser(term: $term) {
+      id
+      username
+      fullName
+    }
+  }
+`;

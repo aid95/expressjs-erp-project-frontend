@@ -108,3 +108,19 @@ export const SEE_FULL_DAILY_JOURNAL = gql`
     }
   }
 `;
+
+export const CREATE_DAILY_JOURNAL = gql`
+  mutation createDailyJournal {
+    createDailyJournal {
+      id
+    }
+  }
+`;
+
+export const SEND_MAIL = gql`
+  mutation sendMail($to: String!, $subject: String!, $content: String!) {
+    sendMail(to: $to, subject: $subject, content: $content) {
+      id
+    }
+  }
+`;

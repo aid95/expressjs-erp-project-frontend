@@ -2,8 +2,9 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import ProfileHeaderUnit from "./Units/ProfileHeaderUnit";
-import ProfileContentUnit from "./Units/ProfileContentUnit";
-import { SEE_DOC_APPROVALS, SEE_FULL_DOC_APPROVAL } from "./ProfileQueries";
+import { DailyJournalContent } from "./Units/ContentParts/DailyJournalTabContent";
+import { MailContent } from "./Units/ContentParts/MailTabContent";
+import { ApprovalDocContent } from "./Units/ContentParts/ApprovalDocTabContent";
 
 const Container = styled.div`
   width: 100%;
@@ -76,7 +77,9 @@ const ProfilePresenter = ({ subMenuState }) => {
         </MenubarList>
       </MenubarWrapper>
 
-      <ProfileContentUnit menuName={subMenu} />
+      {subMenu === "defaultMenu" && <DailyJournalContent />}
+      {subMenu === "mailMenu" && <MailContent />}
+      {subMenu === "docsMenu" && <ApprovalDocContent />}
     </Container>
   );
 };
