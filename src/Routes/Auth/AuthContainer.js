@@ -8,6 +8,7 @@ import { logUserIn } from "../../utils";
 
 const AuthContainer = () => {
   const [action, setAction] = useState("logIn");
+  const [address, setAddress] = useState("");
 
   const username = useInput("");
   const password = useInput("");
@@ -15,6 +16,7 @@ const AuthContainer = () => {
   const lastName = useInput("");
   const birthDay = useInput("");
   const email = useInput("");
+  const addressDetail = useInput("");
 
   const [createAccountMutation] = useMutation(CREATE_ACCOUNT, {
     variables: {
@@ -24,6 +26,8 @@ const AuthContainer = () => {
       firstName: firstName.value,
       lastName: lastName.value,
       birthDay: birthDay.value,
+      address: address,
+      addressDetail: addressDetail.value,
     },
   });
 
@@ -58,7 +62,9 @@ const AuthContainer = () => {
         password.value !== "" &&
         firstName.value !== "" &&
         lastName.value !== "" &&
-        birthDay.value !== ""
+        birthDay.value !== "" &&
+        address !== "" &&
+        addressDetail.value !== ""
       ) {
         try {
           const {
@@ -81,6 +87,7 @@ const AuthContainer = () => {
 
   return (
     <AuthPresenter
+      setAddress={setAddress}
       setAction={setAction}
       action={action}
       username={username}
@@ -89,6 +96,7 @@ const AuthContainer = () => {
       lastName={lastName}
       birthDay={birthDay}
       email={email}
+      addressDetail={addressDetail}
       onSubmit={onSubmit}
     />
   );

@@ -14,6 +14,8 @@ export const CREATE_ACCOUNT = gql`
     $firstName: String!
     $lastName: String!
     $birthDay: String!
+    $address: String!
+    $addressDetail: String!
   ) {
     createAccount(
       email: $email
@@ -22,6 +24,8 @@ export const CREATE_ACCOUNT = gql`
       firstName: $firstName
       lastName: $lastName
       birthDay: $birthDay
+      address: $address
+      addressDetail: $addressDetail
     )
   }
 `;

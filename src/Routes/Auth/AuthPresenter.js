@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
+import { JusoSearchInput } from "../../Components/SearchInput";
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,9 +15,9 @@ const Wrapper = styled.div`
 
 const Box = styled.div`
   ${(props) => props.theme.whiteBox}
-  border-radius:0px;
+  border-radius: 0px;
   width: 100%;
-  max-width: 350px;
+  max-width: 382px;
 `;
 
 const StateChanger = styled(Box)`
@@ -55,7 +56,9 @@ const AuthPresenter = ({
   lastName,
   email,
   birthDay,
+  addressDetail,
   setAction,
+  setAddress,
   onSubmit,
 }) => (
   <Wrapper>
@@ -84,6 +87,8 @@ const AuthPresenter = ({
             <Input placeholder={"First name"} {...firstName} />
             <Input placeholder={"Last name"} {...lastName} />
             <Input placeholder={"Birth day"} {...birthDay} />
+            <JusoSearchInput setAddress={setAddress} />
+            <Input placeholder={"address detail"} {...addressDetail} />
             <Button text={"Sign up"} />
           </form>
         </>
