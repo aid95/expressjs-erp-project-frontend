@@ -24,7 +24,7 @@ const ContentListItemThumbnailWrapper = styled.div`
 const ContentListItemInfoWrapper = styled.div``;
 
 const ContentListItemTitle = styled.p`
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 400;
   margin-bottom: 8px;
   cursor: pointer;

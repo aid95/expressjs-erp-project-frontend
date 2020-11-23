@@ -53,6 +53,10 @@ const NewMailModal = (props) => {
     },
   });
 
+  const searchInputOnChange = ({ id }) => {
+    setUser(id);
+  };
+
   return (
     <Modal
       {...props}
@@ -68,7 +72,7 @@ const NewMailModal = (props) => {
       <Modal.Body>
         <ModalContainer>
           <ModalInputWrapper>
-            <UserSearchInput setUser={setUser} />
+            <UserSearchInput setUser={searchInputOnChange} />
           </ModalInputWrapper>
           <ModalInputWrapper>
             <Input

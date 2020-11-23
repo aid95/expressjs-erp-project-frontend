@@ -27,6 +27,7 @@ import Input, { MultiLineInput } from "../../../../Components/Input";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import styled from "styled-components";
+import gql from "graphql-tag";
 
 const POLL_INTERVAL = 2000;
 
@@ -44,18 +45,73 @@ const ModalInputWrapper = styled.div`
   padding: 10px 0;
 `;
 
+const ModalInputCaption = styled.p`
+  margin-bottom: 5px;
+`;
+
+const ApproverList = styled.ul`
+  display: flex;
+`;
+const ApproverItem = styled.li`
+  border-radius: 3px;
+  background-color: #007aff;
+  color: white;
+  padding: 5px 6px;
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
+`;
+
+const CREATE_NEW_APPROVAL_DOC = gql`
+  mutation createDocApproval(
+    $approvers: [String!]!
+    $reviewers: [String!]!
+    $subject: String!
+    $content: String!
+    $comment: String
+  ) {
+    createDocApproval(
+      approvers: $approvers
+      reviewers: $reviewers
+      subject: $subject
+      content: $content
+      comment: $comment
+    )
+  }
+`;
+
 const NewApprovalDocModal = (props) => {
   const subject = useInput("");
   const content = useInput("");
-  const [user, setUser] = useState("");
+  const comment = useInput("");
+  const [approvers, setApprovers] = useState([]);
+  const [reviewers, setReviewers] = useState([]);
+
+  const [createDocApproval] = useMutation(CREATE_NEW_APPROVAL_DOC, {
+    variables: {
+      approvers: approvers.map(({ id }) => id),
+      reviewers: reviewers.map(({ id }) => id),
+      subject: subject.value,
+      content: content.value,
+      comment: content.value,
+    },
+  });
 
   const [sendMail] = useMutation(SEND_MAIL, {
     variables: {
-      to: user,
+      to: approvers,
       subject: subject.value,
       content: content.value,
     },
   });
+
+  const appendApprovers = ({ id, username, fullName }) => {
+    setApprovers([...approvers, { id, username, fullName }]);
+  };
+
+  const appendReviewers = ({ id, username, fullName }) => {
+    setReviewers([...reviewers, { id, username, fullName }]);
+  };
 
   return (
     <Modal
@@ -72,26 +128,35 @@ const NewApprovalDocModal = (props) => {
       <Modal.Body>
         <ModalContainer>
           <ModalInputWrapper>
-            <UserSearchInput setUser={setUser} />
+            <UserSearchInput setUser={appendApprovers} />
+            <ModalInputCaption>결재자 선택</ModalInputCaption>
+            <ApproverList>
+              {approvers.map((approver) => (
+                <ApproverItem>{approver.fullName}</ApproverItem>
+              ))}
+            </ApproverList>
           </ModalInputWrapper>
           <ModalInputWrapper>
-            <Input
-              onChange={(e) => {
-                console.log(e);
-              }}
-              value={""}
-              placeholder={"제목"}
-              {...subject}
-            />
+            <UserSearchInput setUser={appendReviewers} />
+            <ModalInputCaption>참고인 선택</ModalInputCaption>
+            <ApproverList>
+              {reviewers.map((reviewer) => (
+                <ApproverItem>{reviewer.fullName}</ApproverItem>
+              ))}
+            </ApproverList>
+          </ModalInputWrapper>
+          <ModalInputWrapper>
+            <Input value={""} placeholder={"제목"} {...subject} />
+          </ModalInputWrapper>
+          <ModalInputWrapper>
+            <MultiLineInput value={""} placeholder={"내용"} {...content} />
           </ModalInputWrapper>
           <ModalInputWrapper>
             <MultiLineInput
-              onChange={(e) => {
-                console.log(e);
-              }}
               value={""}
-              placeholder={"내용"}
-              {...content}
+              placeholder={"추가 사항"}
+              col={10}
+              {...comment}
             />
           </ModalInputWrapper>
         </ModalContainer>
@@ -99,7 +164,7 @@ const NewApprovalDocModal = (props) => {
       <Modal.Footer>
         <Button
           onClick={async (e) => {
-            if (user !== "" && subject !== "" && content !== "") {
+            if (approvers !== "" && subject !== "" && content !== "") {
               await sendMail();
               subject.setValue("");
               content.setValue("");
@@ -109,7 +174,7 @@ const NewApprovalDocModal = (props) => {
             }
           }}
         >
-          보내기
+          작성하기
         </Button>
       </Modal.Footer>
     </Modal>

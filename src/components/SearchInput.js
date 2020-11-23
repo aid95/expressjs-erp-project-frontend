@@ -61,7 +61,7 @@ export const UserSearchInput = ({ setUser }) => {
           getUsers();
           resolve(
             users.map(({ id, username, fullName }) => ({
-              value: `${id}`,
+              value: { id, username, fullName },
               name: `${fullName} @${username}`,
             }))
           );

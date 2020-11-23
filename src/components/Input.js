@@ -17,7 +17,7 @@ const MultilineContainer = styled.textarea`
   border: ${(props) => props.theme.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.bgColor};
-  height: 300px;
+  height: 200px;
   font-size: 12px;
   padding: 15px;
 `;
@@ -55,7 +55,7 @@ export const MultiLineInput = ({
   onChange,
   type = "text",
   className,
-  col = 200,
+  col = 20,
   row = 3,
 }) => (
   <MultilineContainer
