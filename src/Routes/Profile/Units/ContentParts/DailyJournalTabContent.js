@@ -13,20 +13,30 @@ import {
   SEE_DAILY_JOURNALS,
   SEE_FULL_DAILY_JOURNAL,
 } from "../../ProfileQueries";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   ContentList,
   ContentListItemComp,
 } from "../../../../Components/ContentList";
 import DailyJournal from "../../../../Components/Form/DailyJournal";
+import { toast } from "react-toastify";
 
 const POLL_INTERVAL = 2000;
 
 const NewDailyJournalButton = () => {
   const [createDailyJournalMutation] = useMutation(CREATE_DAILY_JOURNAL);
   const onClick = async (e) => {
-    createDailyJournalMutation();
+    try {
+      const {
+        data: { createDailyJournal },
+      } = await createDailyJournalMutation();
+      if (!!createDailyJournal) {
+        toast.success("새 업무 일지가 추가되었습니다.");
+      } else {
+        toast.error("이미 금일 업무 일지가 존재합니다.");
+      }
+    } catch (e) {}
   };
   return <NewButtonStyle onClick={onClick}>새 업무 일지 추가</NewButtonStyle>;
 };

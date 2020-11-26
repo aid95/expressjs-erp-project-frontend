@@ -8,6 +8,7 @@ import SelectSearch from "react-select-search";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
 import { toast } from "react-toastify";
+import { format } from "date-fns";
 
 const ContentTableRow = styled.div`
   display: flex;
@@ -51,8 +52,8 @@ const DateTimeText = styled.span`
 `;
 
 const JournalItem = ({ categorys, journalText, start, end }) => {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  const startDate = format(new Date(start), "HH:mm");
+  const endDate = format(new Date(end), "HH:mm");
   const subCategory = categorys || "-";
   const middleCategory = subCategory.parentCategory || "-";
   const mainCategory = middleCategory.parentCategory || "-";
@@ -68,14 +69,10 @@ const JournalItem = ({ categorys, journalText, start, end }) => {
         </JournalInfoWrapper>
       </ContentTableCell>
       <ContentCenterTableCell cellWidth={20}>
-        <DateTimeText>
-          {startDate.getHours()}:{startDate.getMinutes()}
-        </DateTimeText>
+        <DateTimeText>{startDate}</DateTimeText>
       </ContentCenterTableCell>
       <ContentCenterTableCell cellWidth={20}>
-        <DateTimeText>
-          {endDate.getHours()}:{endDate.getMinutes()}
-        </DateTimeText>
+        <DateTimeText>{endDate}</DateTimeText>
       </ContentCenterTableCell>
     </ContentTableRow>
   );
