@@ -84,7 +84,7 @@ const NewMailNotify = ({ userId }) => {
 
   const alert = () => {
     if (!loading) {
-      toast(data.notifyNewMail.subject);
+      toast.done(data.notifyNewMail.subject);
     }
   };
 

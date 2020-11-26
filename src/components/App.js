@@ -53,7 +53,7 @@ function App() {
           </>
         </Router>
         <ToastContainer
-          position={toast.POSITION.TOP_RIGHT}
+          position={toast.POSITION.BOTTOM_RIGHT}
           autoClose={2500}
           hideProgressBar={true}
         />

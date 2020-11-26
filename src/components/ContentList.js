@@ -21,19 +21,30 @@ const ContentListItemThumbnailWrapper = styled.div`
   font-size: 28px;
 `;
 
-const ContentListItemInfoWrapper = styled.div``;
+const ContentListItemInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const ContentListItemTitle = styled.p`
+const ContentListItemTitle = styled.span`
+  max-width: 240px;
   font-size: 18px;
   font-weight: 400;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const ContentListItemSubText = styled.span`
+  max-width: 240px;
   font-size: 14px;
   font-weight: 200;
-  margin-top: 8px;
+  margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const ContentListItemComp = ({
@@ -44,7 +55,7 @@ export const ContentListItemComp = ({
   onClick,
   isSelected,
 }) => (
-  <ContentListItem isSelected={isSelected}>
+  <ContentListItem key={id} isSelected={isSelected}>
     <ContentListItemThumbnailWrapper>{emoji}</ContentListItemThumbnailWrapper>
     <ContentListItemInfoWrapper>
       <ContentListItemTitle id={id} onClick={onClick}>

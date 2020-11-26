@@ -56,13 +56,15 @@ const UserMsgTitleWrapper = styled.div`
 
 const UserMsgTitle = styled.h1`
   font-size: 18px;
+  line-height: 22px;
 `;
 
 const UserInfoHeadWrapper = styled.div``;
 
-const UserMsgContent = styled.div`
+const UserMsgContent = styled.p`
   padding: 20px;
   font-size: 16px;
+  line-height: 26px;
 `;
 
 const UserMessage = (data) => {
@@ -88,7 +90,7 @@ const UserMessage = (data) => {
           </UserInfoHeadWrapper>
         </UserMsgProfileWrapper>
         <UserMsgTitleWrapper>
-          <UserMsgTitle>제목 : {subject}</UserMsgTitle>
+          <UserMsgTitle>{`제목 : ${subject}`}</UserMsgTitle>
         </UserMsgTitleWrapper>
         <UserMsgContent>{content}</UserMsgContent>
       </UserMsgContainer>
