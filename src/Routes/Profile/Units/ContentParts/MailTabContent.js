@@ -131,6 +131,7 @@ const NewMailButton = () => {
 
 export const MailContent = () => {
   const [selectedItemId, setSelectedItemId] = useState("");
+  const [viewMail, setViewMail] = useState(false);
 
   const [queryGetItems, resultGetItems] = useLazyQuery(SEE_MAILS, {
     pollInterval: POLL_INTERVAL,
@@ -144,6 +145,7 @@ export const MailContent = () => {
 
   const onMailClick = async (e) => {
     setSelectedItemId(e.target.id);
+    setViewMail(true);
   };
 
   useEffect(() => {
@@ -191,9 +193,13 @@ export const MailContent = () => {
 
       <ContentDetail>
         {!resultViewItem.loading &&
+          viewMail &&
           resultViewItem.data &&
           resultViewItem.data.seeFullMail && (
-            <UserMessage data={resultViewItem.data.seeFullMail} />
+            <UserMessage
+              view={setViewMail}
+              data={resultViewItem.data.seeFullMail}
+            />
           )}
       </ContentDetail>
     </ContentContainer>

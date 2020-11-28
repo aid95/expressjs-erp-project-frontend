@@ -6,7 +6,7 @@ export const NewButtonStyle = styled.button`
   border-radius: 5px;
   width: 95%;
   height: 50px;
-  font-weight: 600;
+  font-weight: 400;
 `;
 
 export const SCROLLBAR_STYLE = styled.div`

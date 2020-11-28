@@ -17,9 +17,11 @@ export const SEE_MAILS = gql`
 export const SEE_FULL_MAIL = gql`
   query seeFullMail($id: String!) {
     seeFullMail(id: $id) {
+      id
       subject
       content
       from {
+        id
         fullName
         rank {
           title
