@@ -81,15 +81,12 @@ const NewMailNotify = ({ userId }) => {
     },
     fetchPolicy: "network-only",
   });
-
   const alert = () => {
     if (!loading) {
-      toast.done(data.notifyNewMail.subject);
+      toast.success(`새 메일 도착이 도착하였습니다.`);
     }
   };
-
-  useMemo(() => alert(), [data]);
-
+  useMemo(() => alert(), [data, loading]);
   return <></>;
 };
 
