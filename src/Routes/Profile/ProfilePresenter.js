@@ -5,6 +5,7 @@ import ProfileHeaderUnit from "./Units/ProfileHeaderUnit";
 import { DailyJournalContent } from "./Units/ContentParts/DailyJournalTabContent";
 import { MailContent } from "./Units/ContentParts/MailTabContent";
 import { ApprovalDocContent } from "./Units/ContentParts/ApprovalDocTabContent";
+import { PayStubTabContent } from "./Units/ContentParts/PayStubTabContent";
 
 const Container = styled.div`
   width: 100%;
@@ -80,6 +81,7 @@ const ProfilePresenter = ({ subMenuState }) => {
       {subMenu === "defaultMenu" && <DailyJournalContent />}
       {subMenu === "mailMenu" && <MailContent />}
       {subMenu === "docsMenu" && <ApprovalDocContent />}
+      {subMenu === "payStubMenu" && <PayStubTabContent />}
     </Container>
   );
 };

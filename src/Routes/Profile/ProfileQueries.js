@@ -126,3 +126,33 @@ export const SEND_MAIL = gql`
     }
   }
 `;
+
+export const MY_SALARIES = gql`
+  {
+    mySalaries {
+      id
+      createdAt
+    }
+  }
+`;
+
+export const SEE_PAYMENT_STUB = gql`
+  query seeSalary($id: String!) {
+    seeSalary(id: $id) {
+      user {
+        id
+        fullName
+      }
+      id
+      monthSalary
+      dayShiftAmount
+      holidayAmount
+      nightShiftAmount
+      overtimeAmount
+      nationalPension
+      healthInsurance
+      employmentInsurance
+      createdAt
+    }
+  }
+`;

@@ -11,3 +11,7 @@ export const logUserOut = () => {
 export const isLoggedIn = () => {
   return !!localStorage.getItem("token");
 };
+
+export const numberWithCommas = (n) => {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

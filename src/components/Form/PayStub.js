@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { format } from "date-fns";
+import { numberWithCommas } from "../../utils";
 
 //
 const PayStubContainer = styled.div`
@@ -98,12 +100,28 @@ const PayStubDetailItemHead = styled.h1`
 const PayStubDetailItemText = styled.span`
   font-size: 18px;
   font-weight: 200;
-  width: 60%;
+  width: 40%;
+  text-align: right;
 `;
 
 const PayStubTotalWrapper = styled(PayStubDetailWrapper)``;
 
-const PayStub = () => {
+const PayStub = ({ data }) => {
+  const {
+    id,
+    user,
+    nationalPension,
+    healthInsurance,
+    employmentInsurance,
+    overtimeAmount,
+    holidayAmount,
+    monthSalary,
+    dayShiftAmount,
+    nightShiftAmount,
+    createdAt,
+  } = data;
+  console.log(holidayAmount);
+
   return (
     <>
       <PayStubContainer>
@@ -111,15 +129,28 @@ const PayStub = () => {
         <PayStubAmountWrapper>
           <TakeHomePayInfo>
             <TakeHomePayHead>지급 금액</TakeHomePayHead>
-            <TakeHomePayText>1,000,000,000</TakeHomePayText>
+            <TakeHomePayText>
+              {numberWithCommas(monthSalary)}&nbsp;원
+            </TakeHomePayText>
           </TakeHomePayInfo>
           <TakeHomePayInfo>
             <TakeHomePayHead>공제 금액</TakeHomePayHead>
-            <TakeHomePayText>0</TakeHomePayText>
+            <TakeHomePayText>
+              {numberWithCommas(
+                nationalPension + healthInsurance + employmentInsurance
+              )}
+              &nbsp;원
+            </TakeHomePayText>
           </TakeHomePayInfo>
           <TakeHomePayInfo>
             <TakeHomePayHead>실 수령액</TakeHomePayHead>
-            <TakeHomePayText>1,000,000,000</TakeHomePayText>
+            <TakeHomePayText>
+              {numberWithCommas(
+                monthSalary -
+                  (nationalPension + healthInsurance + employmentInsurance)
+              )}
+              &nbsp;원
+            </TakeHomePayText>
           </TakeHomePayInfo>
         </PayStubAmountWrapper>
         <PayStubDetailWrapper>
@@ -127,19 +158,27 @@ const PayStub = () => {
             <PayStubDetailList>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>기본급</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(dayShiftAmount)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>연장근로수당</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(overtimeAmount)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>야간근로수당</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(nightShiftAmount)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>휴일근로수당</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(holidayAmount)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
             </PayStubDetailList>
           </PayStubDetailLeft>
@@ -147,15 +186,21 @@ const PayStub = () => {
             <PayStubDetailList>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>국민연금</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(nationalPension)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>국민건강보험</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(healthInsurance)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>고용보험</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(employmentInsurance)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
             </PayStubDetailList>
           </PayStubDetailRight>
@@ -164,41 +209,54 @@ const PayStub = () => {
           <PayStubDetailLeft>
             <PayStubDetailList>
               <PayStubDetailItem>
-                <PayStubDetailItemHead></PayStubDetailItemHead>
-                <PayStubDetailItemText></PayStubDetailItemText>
+                <PayStubDetailItemHead>&nbsp;</PayStubDetailItemHead>
+                <PayStubDetailItemText>&nbsp;</PayStubDetailItemText>
               </PayStubDetailItem>
             </PayStubDetailList>
           </PayStubDetailLeft>
           <PayStubDetailRight>
             <PayStubDetailList>
               <PayStubDetailItem>
-                <PayStubDetailItemHead></PayStubDetailItemHead>
-                <PayStubDetailItemText></PayStubDetailItemText>
+                <PayStubDetailItemHead>&nbsp;</PayStubDetailItemHead>
+                <PayStubDetailItemText>&nbsp;</PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
-                <PayStubDetailItemHead></PayStubDetailItemHead>
-                <PayStubDetailItemText></PayStubDetailItemText>
+                <PayStubDetailItemHead>&nbsp;</PayStubDetailItemHead>
+                <PayStubDetailItemText>&nbsp;</PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
-                <PayStubDetailItemHead></PayStubDetailItemHead>
-                <PayStubDetailItemText></PayStubDetailItemText>
+                <PayStubDetailItemHead>&nbsp;</PayStubDetailItemHead>
+                <PayStubDetailItemText>&nbsp;</PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>지급액</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(monthSalary)}&nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>공제액</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(
+                    nationalPension + healthInsurance + employmentInsurance
+                  )}
+                  &nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
               <PayStubDetailItem>
                 <PayStubDetailItemHead>실 지급액</PayStubDetailItemHead>
-                <PayStubDetailItemText>1,000,000,000</PayStubDetailItemText>
+                <PayStubDetailItemText>
+                  {numberWithCommas(
+                    monthSalary -
+                      (nationalPension + healthInsurance + employmentInsurance)
+                  )}
+                  &nbsp;원
+                </PayStubDetailItemText>
               </PayStubDetailItem>
             </PayStubDetailList>
           </PayStubDetailRight>
         </PayStubTotalWrapper>
-        <PayStubFoot>2020. 10. 02</PayStubFoot>
+        <PayStubFoot>{format(new Date(createdAt), "yyyy. MM. dd")}</PayStubFoot>
         <PayStubFoot>귀하의 노고에 감사드립니다.</PayStubFoot>
       </PayStubContainer>
     </>
