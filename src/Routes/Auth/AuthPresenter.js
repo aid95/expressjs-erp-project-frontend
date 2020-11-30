@@ -4,6 +4,11 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { JusoSearchInput } from "../../Components/SearchInput";
+import MomentUtils from "@date-io/moment";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
 const Wrapper = styled.div`
   display: flex;
@@ -48,6 +53,10 @@ const Form = styled(Box)`
   }
 `;
 
+const W100KeyboardDatePicker = styled(KeyboardDatePicker)`
+  width: 100%;
+`;
+
 const AuthPresenter = ({
   action,
   username,
@@ -55,60 +64,73 @@ const AuthPresenter = ({
   firstName,
   lastName,
   email,
-  birthDay,
   addressDetail,
   setAction,
   setAddress,
+  selectedDate,
   onSubmit,
+  onDateChange,
 }) => (
-  <Wrapper>
-    <Form>
-      {action === "logIn" && (
-        <>
-          <Helmet>
-            <title>Log In | ERP Monitor</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <Input placeholder={"Username"} {...username} />
-            <Input placeholder={"Password"} {...password} type="password" />
-            <Button text={"Log in"} />
-          </form>
-        </>
-      )}
-      {action === "signUp" && (
-        <>
-          <Helmet>
-            <title>Sign Up | ERP Monitor</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <Input placeholder={"Email"} {...email} type="email" />
-            <Input placeholder={"Username"} {...username} />
-            <Input placeholder={"Password"} {...password} type="password" />
-            <Input placeholder={"First name"} {...firstName} />
-            <Input placeholder={"Last name"} {...lastName} />
-            <Input placeholder={"Birth day"} {...birthDay} />
-            <JusoSearchInput setAddress={setAddress} />
-            <Input placeholder={"address detail"} {...addressDetail} />
-            <Button text={"Sign up"} />
-          </form>
-        </>
-      )}
-    </Form>
+  <MuiPickersUtilsProvider utils={MomentUtils}>
+    <Wrapper>
+      <Form>
+        {action === "logIn" && (
+          <>
+            <Helmet>
+              <title>Log In | ERP Monitor</title>
+            </Helmet>
+            <form onSubmit={onSubmit}>
+              <Input placeholder={"Username"} {...username} />
+              <Input placeholder={"Password"} {...password} type="password" />
+              <Button text={"Log in"} />
+            </form>
+          </>
+        )}
+        {action === "signUp" && (
+          <>
+            <Helmet>
+              <title>Sign Up | ERP Monitor</title>
+            </Helmet>
+            <form onSubmit={onSubmit}>
+              <Input placeholder={"Email"} {...email} type="email" />
+              <Input placeholder={"Username"} {...username} />
+              <Input placeholder={"Password"} {...password} type="password" />
+              <Input placeholder={"First name"} {...firstName} />
+              <Input placeholder={"Last name"} {...lastName} />
+              <W100KeyboardDatePicker
+                margin="normal"
+                id="date-picker-dialog"
+                label="🎉 생년월일"
+                format="MM/dd/yyyy"
+                value={selectedDate}
+                onChange={onDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <JusoSearchInput setAddress={setAddress} />
+              <Input placeholder={"address detail"} {...addressDetail} />
+              <Button text={"Sign up"} />
+            </form>
+          </>
+        )}
+      </Form>
 
-    <StateChanger>
-      {action === "logIn" ? (
-        <>
-          Don't have an account?{" "}
-          <Link onClick={() => setAction("signUp")}>Sign up</Link>
-        </>
-      ) : (
-        <>
-          Have an account?{" "}
-          <Link onClick={() => setAction("logIn")}>Log in</Link>
-        </>
-      )}
-    </StateChanger>
-  </Wrapper>
+      <StateChanger>
+        {action === "logIn" ? (
+          <>
+            Don't have an account?{" "}
+            <Link onClick={() => setAction("signUp")}>Sign up</Link>
+          </>
+        ) : (
+          <>
+            Have an account?{" "}
+            <Link onClick={() => setAction("logIn")}>Log in</Link>
+          </>
+        )}
+      </StateChanger>
+    </Wrapper>
+  </MuiPickersUtilsProvider>
 );
 
 export default AuthPresenter;

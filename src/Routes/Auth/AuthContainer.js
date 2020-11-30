@@ -9,12 +9,12 @@ import { logUserIn } from "../../utils";
 const AuthContainer = () => {
   const [action, setAction] = useState("logIn");
   const [address, setAddress] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const username = useInput("");
   const password = useInput("");
   const firstName = useInput("");
   const lastName = useInput("");
-  const birthDay = useInput("");
   const email = useInput("");
   const addressDetail = useInput("");
 
@@ -25,7 +25,7 @@ const AuthContainer = () => {
       password: password.value,
       firstName: firstName.value,
       lastName: lastName.value,
-      birthDay: birthDay.value,
+      birthDay: selectedDate.toISOString(),
       address: address,
       addressDetail: addressDetail.value,
     },
@@ -34,6 +34,10 @@ const AuthContainer = () => {
   const [logInMutation] = useMutation(LOG_IN, {
     variables: { username: username.value, password: password.value },
   });
+
+  const onDateChange = (e) => {
+    setSelectedDate(e);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -62,7 +66,6 @@ const AuthContainer = () => {
         password.value !== "" &&
         firstName.value !== "" &&
         lastName.value !== "" &&
-        birthDay.value !== "" &&
         address !== "" &&
         addressDetail.value !== ""
       ) {
@@ -89,15 +92,16 @@ const AuthContainer = () => {
     <AuthPresenter
       setAddress={setAddress}
       setAction={setAction}
+      selectedDate={selectedDate}
       action={action}
       username={username}
       password={password}
       firstName={firstName}
       lastName={lastName}
-      birthDay={birthDay}
       email={email}
       addressDetail={addressDetail}
       onSubmit={onSubmit}
+      onDateChange={onDateChange}
     />
   );
 };
