@@ -74,3 +74,18 @@ export const ContentLeftList = styled(SCROLLBAR_STYLE)`
 export const ContentDetail = styled(SCROLLBAR_STYLE)`
   width: 72%;
 `;
+
+export const ModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ModalInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px 0;
+  align-items: ${(props) => (!!props.ai ? "center" : "left")};
+`;

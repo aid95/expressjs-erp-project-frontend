@@ -1,7 +1,7 @@
-import { useQuery } from "@apollo/client";
-import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import React, { useState } from "react";
 import styled from "styled-components";
-
+import MomentUtils from "@date-io/moment";
 import {
   Cake,
   Document,
@@ -12,6 +12,41 @@ import {
 } from "../../../Components/Icons";
 import ProfileImage from "../../../Components/ProfileImage";
 import { ME } from "../../../SharedQueries";
+import { CREATE_COMMUTE_TIME, MY_COMMUTETIME } from "../ProfileQueries";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import {
+  ModalContainer,
+  ModalInputWrapper,
+} from "./ContentParts/ContentStyles";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { format } from "date-fns";
+import Grid from "@material-ui/core/Grid";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { toast } from "react-toastify";
+import { makeStyles, TextField } from "@material-ui/core";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
+}));
 
 const ProfileHeaderWrapper = styled.div`
   display: flex;
@@ -109,8 +144,150 @@ const ProfileHeaderMenuListItem = styled.li`
   align-items: center;
 `;
 
+const ViewCommuteTimesModal = (props) => {
+  const classes = useStyles();
+
+  const { data, loading } = useQuery(MY_COMMUTETIME);
+  const [isHoliday, setIsHoliday] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    new Date(`${format(new Date(), "yyyy-MM-dd")}T09:00`)
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState(
+    new Date(`${format(new Date(), "yyyy-MM-dd")}T18:00`)
+  );
+
+  const commuteTimeToGraphData = (commuteTimeList) => {
+    const data = commuteTimeList.map(
+      ({ nightShiftTime, overWorkTime, workDateTime, workTime }) => {
+        return {
+          야간: nightShiftTime,
+          연장: overWorkTime + nightShiftTime,
+          일반: workTime,
+          날짜: format(new Date(workDateTime), "yyyy년 MM월 dd일"),
+        };
+      }
+    );
+    return data;
+  };
+
+  const [createCommuteTimeMutation] = useMutation(CREATE_COMMUTE_TIME, {
+    variables: {
+      startDate: selectedStartDate.toISOString(),
+      endDate: selectedEndDate.toISOString(),
+      isHoliday,
+    },
+  });
+
+  return (
+    <>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        {!loading && data && data.myCommuteTime && (
+          <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">
+                📓 내 출퇴 기록
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ModalContainer>
+                <ModalInputWrapper ai={true}>
+                  <LineChart
+                    width={760}
+                    height={200}
+                    data={commuteTimeToGraphData(data.myCommuteTime)}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="날짜" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="일반" stroke="#82ca9d" />
+                    <Line type="monotone" dataKey="연장" stroke="#de3a50" />
+                    <Line type="monotone" dataKey="야간" stroke="#8884d8" />
+                  </LineChart>
+                </ModalInputWrapper>
+              </ModalContainer>
+            </Modal.Body>
+            <Modal.Footer>
+              <Grid container justify="space-around">
+                <TextField
+                  id="datetime-local"
+                  label="출근 시간"
+                  type="datetime-local"
+                  defaultValue={`${format(
+                    selectedStartDate,
+                    "yyyy-MM-dd"
+                  )}T09:00`}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={(e) =>
+                    setSelectedStartDate(new Date(e.target.value))
+                  }
+                />
+                <TextField
+                  id="datetime-local"
+                  label="퇴근 시간"
+                  type="datetime-local"
+                  defaultValue={`${format(
+                    selectedEndDate,
+                    "yyyy-MM-dd"
+                  )}T18:00`}
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={(e) => setSelectedEndDate(new Date(e.target.value))}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isHoliday}
+                      onChange={(event) => setIsHoliday(event.target.checked)}
+                      name="checkedB"
+                      color="primary"
+                    />
+                  }
+                  label="휴무 수당 적용"
+                />
+                <Button
+                  onClick={async (e) => {
+                    if (selectedStartDate < selectedEndDate) {
+                      await createCommuteTimeMutation();
+                      props.onHide();
+                    } else {
+                      toast.error("출퇴 시간이 잘못되었습니다.");
+                    }
+                  }}
+                >
+                  출퇴 기록
+                </Button>
+              </Grid>
+            </Modal.Footer>
+          </Modal>
+        )}
+      </MuiPickersUtilsProvider>
+    </>
+  );
+};
+
 const ProfileHeaderUnit = () => {
   const { data, loading } = useQuery(ME);
+  const [viewCommuteTimesModal, setViewCommuteTimesModal] = React.useState(
+    false
+  );
 
   return (
     <>
@@ -154,7 +331,11 @@ const ProfileHeaderUnit = () => {
 
             <ProfileInfoRight>
               <ProfileHeaderMenuList>
-                <ProfileHeaderMenuListItem>
+                <ProfileHeaderMenuListItem
+                  onClick={() => {
+                    setViewCommuteTimesModal(true);
+                  }}
+                >
                   <SubTextDeco size={20}>근무 시간</SubTextDeco>
                   <br />
                   <Timer size={64} />
@@ -180,6 +361,12 @@ const ProfileHeaderUnit = () => {
           </ProfileInfoWrapper>
         </ProfileHeaderWrapper>
       )}
+      <ViewCommuteTimesModal
+        show={viewCommuteTimesModal}
+        onHide={() => {
+          setViewCommuteTimesModal(false);
+        }}
+      />
     </>
   );
 };

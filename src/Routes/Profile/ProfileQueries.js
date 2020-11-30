@@ -43,6 +43,13 @@ export const SEE_DOC_APPROVALS = gql`
       drafter {
         username
       }
+      currentApprover {
+        id
+        approver {
+          id
+          username
+        }
+      }
       createdAt
     }
   }
@@ -52,12 +59,27 @@ export const SEE_FULL_DOC_APPROVAL = gql`
   query seeFullDocApproval($id: String!) {
     seeFullDocApproval(id: $id) {
       id
-      drafter {
-        username
-      }
       subject
       content
-      createdAt
+      comment
+      rejectReason
+      currentApprover {
+        id
+        approver {
+          id
+          username
+        }
+      }
+      drafter {
+        fullName
+        department {
+          title
+        }
+        rank {
+          title
+        }
+        username
+      }
       approvers {
         approver {
           username
@@ -70,6 +92,7 @@ export const SEE_FULL_DOC_APPROVAL = gql`
         }
         isPass
       }
+      createdAt
     }
   }
 `;
@@ -139,11 +162,6 @@ export const MY_SALARIES = gql`
 export const SEE_PAYMENT_STUB = gql`
   query seeSalary($id: String!) {
     seeSalary(id: $id) {
-      user {
-        id
-        fullName
-      }
-      id
       monthSalary
       dayShiftAmount
       holidayAmount
@@ -153,6 +171,62 @@ export const SEE_PAYMENT_STUB = gql`
       healthInsurance
       employmentInsurance
       createdAt
+    }
+  }
+`;
+
+export const MY_COMMUTETIME = gql`
+  {
+    myCommuteTime {
+      workTime
+      overWorkTime
+      nightShiftTime
+      workDateTime
+    }
+  }
+`;
+
+export const CREATE_COMMUTE_TIME = gql`
+  mutation createCommuteTime(
+    $startDate: String!
+    $endDate: String!
+    $isHoliday: Boolean
+  ) {
+    createCommuteTime(
+      startDate: $startDate
+      endDate: $endDate
+      isHoliday: $isHoliday
+    ) {
+      id
+    }
+  }
+`;
+
+export const SEE_CHAT_ROOMS = gql`
+  {
+    seeChatRooms {
+      id
+      participants {
+        fullName
+      }
+      createdAt
+    }
+  }
+`;
+
+export const SEE_CHAT_ROOM = gql`
+  query seeChatRoom($id: String!) {
+    seeChatRoom(id: $id) {
+      id
+      messages {
+        id
+        from {
+          id
+          fullName
+        }
+        text
+        createdAt
+      }
     }
   }
 `;
