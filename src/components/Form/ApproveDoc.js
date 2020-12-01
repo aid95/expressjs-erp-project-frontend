@@ -166,14 +166,7 @@ const ApprovalDocModal = (props) => {
       <Modal.Body>
         <ModalContainer>
           <ModalInputWrapper>
-            <MultiLineInput
-              onChange={(e) => {
-                console.log(e);
-              }}
-              value={""}
-              placeholder={"내용"}
-              {...content}
-            />
+            <MultiLineInput value={""} placeholder={"내용"} {...content} />
           </ModalInputWrapper>
         </ModalContainer>
       </Modal.Body>
@@ -223,7 +216,7 @@ const ApproveDoc = (data) => {
       <ApproversWrapper>
         결재자&nbsp;:&nbsp;
         <ApproversList>
-          {approvers.map(({ id, approver, isPass }) => {
+          {approvers.reverse().map(({ id, approver, isPass }) => {
             const { username } = approver;
             return (
               <ApproversItem id={id} key={id} isPass={isPass}>

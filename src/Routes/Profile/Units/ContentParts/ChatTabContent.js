@@ -61,14 +61,7 @@ const NewChatRoomModal = (props) => {
             <UserSearchInput setUser={searchInputOnChange} />
           </ModalInputWrapper>
           <ModalInputWrapper>
-            <Input
-              onChange={(e) => {
-                console.log(e);
-              }}
-              value={""}
-              placeholder={"내용"}
-              {...message}
-            />
+            <Input value={""} placeholder={"내용"} {...message} />
           </ModalInputWrapper>
         </ModalContainer>
       </Modal.Body>

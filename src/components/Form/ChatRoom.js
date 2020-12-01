@@ -1,14 +1,8 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { SCROLLBAR_STYLE } from "../../Routes/Profile/Units/ContentParts/ContentStyles";
 import useInput from "../../Hooks/useInput";
-import {
-  gql,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-  useSubscription,
-} from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { ME, SEND_MESSAGE } from "../../SharedQueries";
 import { format } from "date-fns";
 import { SEE_CHAT_ROOM } from "../../Routes/Profile/ProfileQueries";

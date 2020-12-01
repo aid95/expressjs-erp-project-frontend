@@ -118,7 +118,6 @@ const PayStub = ({ data }) => {
     nightShiftAmount,
     createdAt,
   } = data;
-  console.log(holidayAmount);
 
   return (
     <>

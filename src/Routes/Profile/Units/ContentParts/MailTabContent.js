@@ -62,24 +62,10 @@ const NewMailModal = (props) => {
             <UserSearchInput setUser={searchInputOnChange} />
           </ModalInputWrapper>
           <ModalInputWrapper>
-            <Input
-              onChange={(e) => {
-                console.log(e);
-              }}
-              value={""}
-              placeholder={"제목"}
-              {...subject}
-            />
+            <Input value={""} placeholder={"제목"} {...subject} />
           </ModalInputWrapper>
           <ModalInputWrapper>
-            <MultiLineInput
-              onChange={(e) => {
-                console.log(e);
-              }}
-              value={""}
-              placeholder={"내용"}
-              {...content}
-            />
+            <MultiLineInput value={""} placeholder={"내용"} {...content} />
           </ModalInputWrapper>
         </ModalContainer>
       </Modal.Body>

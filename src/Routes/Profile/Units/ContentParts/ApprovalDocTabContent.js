@@ -235,7 +235,6 @@ export const ApprovalDocContent = () => {
                 resultGetItems.data.seeDocApproval.map((approvalDoc) => {
                   const isMe =
                     approvalDoc.currentApprover.approver.id === data.me.id;
-                  console.log(approvalDoc);
                   return (
                     <ContentListItemComp
                       emoji={
