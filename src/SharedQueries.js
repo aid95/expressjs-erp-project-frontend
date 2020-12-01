@@ -27,3 +27,11 @@ export const SEARCH_USERS = gql`
     }
   }
 `;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($chatRoomId: String, $toId: String, $message: String!) {
+    sendMessage(chatRoomId: $chatRoomId, toId: $toId, message: $message) {
+      id
+    }
+  }
+`;

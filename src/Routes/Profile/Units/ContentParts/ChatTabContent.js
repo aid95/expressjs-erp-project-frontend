@@ -16,10 +16,9 @@ import {
   ContentList,
   ContentListItemComp,
 } from "../../../../Components/ContentList";
-import { SEE_CHAT_ROOM, SEE_CHAT_ROOMS } from "../../ProfileQueries";
-import UserMessage from "../../../../Components/Form/UserMessage";
+import { SEE_CHAT_ROOMS } from "../../ProfileQueries";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import Button from "@material-ui/core/Button";
 import Input from "../../../../Components/Input";
 import useInput from "../../../../Hooks/useInput";
 import { UserSearchInput } from "../../../../Components/SearchInput";
@@ -53,7 +52,7 @@ const NewChatRoomModal = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          📧 새 메일 보내기
+          💬 새 대화방 만들기
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -75,6 +74,7 @@ const NewChatRoomModal = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button
+          color={"primary"}
           onClick={async (e) => {
             if (user !== "" && message !== "") {
               await sendMessageMutation();
@@ -114,11 +114,6 @@ export const ChatContent = () => {
     fetchPolicy: "network-only",
   });
 
-  const [queryViewItem, resultViewItem] = useLazyQuery(SEE_CHAT_ROOM, {
-    variables: { id: selectedItemId },
-    fetchPolicy: "network-only",
-  });
-
   const onChatRoomClick = async (e) => {
     setSelectedItemId(e.target.id);
     setSeeChatRoom(true);
@@ -130,13 +125,6 @@ export const ChatContent = () => {
     }
     return () => {};
   });
-
-  useEffect(() => {
-    if (selectedItemId !== "") {
-      queryViewItem();
-    }
-    return () => {};
-  }, [selectedItemId, queryViewItem]);
 
   return (
     <ContentContainer>
@@ -172,12 +160,7 @@ export const ChatContent = () => {
       </ContentWrapper>
 
       <ContentDetail>
-        {!resultViewItem.loading &&
-          seeChatRoom &&
-          resultViewItem.data &&
-          resultViewItem.data.seeChatRoom && (
-            <ChatRoom data={resultViewItem.data.seeChatRoom} />
-          )}
+        {seeChatRoom && <ChatRoom roomId={selectedItemId} />}
       </ContentDetail>
     </ContentContainer>
   );

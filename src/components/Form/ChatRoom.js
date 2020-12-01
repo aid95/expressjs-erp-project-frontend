@@ -1,11 +1,17 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { SCROLLBAR_STYLE } from "../../Routes/Profile/Units/ContentParts/ContentStyles";
 import useInput from "../../Hooks/useInput";
-import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
+import {
+  gql,
+  useLazyQuery,
+  useMutation,
+  useQuery,
+  useSubscription,
+} from "@apollo/client";
 import { ME, SEND_MESSAGE } from "../../SharedQueries";
 import { format } from "date-fns";
-import { toast } from "react-toastify";
+import { SEE_CHAT_ROOM } from "../../Routes/Profile/ProfileQueries";
 
 const MessageContainer = styled.div`
   width: 100%;
@@ -63,7 +69,7 @@ const Container = styled.div`
 
 const ChatBoxWrapper = styled(SCROLLBAR_STYLE)`
   width: 100%;
-  height: 70%;
+  height: 80%;
   display: flex;
   flex-direction: column;
 `;
@@ -85,7 +91,7 @@ const InputBoxWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 30%;
+  height: 20%;
   border-top: 1px solid #e6e6e675;
 `;
 
@@ -103,35 +109,74 @@ const NEW_MESSAGE_SUBSCRIPTION = gql`
   }
 `;
 
-const NewMessage = ({ roomId, meId }) => {
-  const { loading, data } = useSubscription(NEW_MESSAGE_SUBSCRIPTION, {
-    variables: {
-      id: roomId,
-    },
-    fetchPolicy: "network-only",
+const ChattingBox = (props) => {
+  const { data } = props;
+
+  useEffect(() => {
+    props.subscribeToNewMessages();
   });
+
   return (
-    <>
-      {!loading && !!data.newMessage && (
-        <MessageBox
-          isTo={meId === data.newMessage.from.id}
-          text={data.newMessage.text}
-          fullName={data.newMessage.from.fullName}
-          date={data.newMessage.createdAt}
-        />
-      )}
-    </>
+    !!data &&
+    !!data.seeChatRoom && (
+      <>
+        {data.seeChatRoom.messages.map(({ id, from, text, createdAt }) => (
+          <MessageBox
+            date={createdAt}
+            fullName={from.fullName}
+            text={text}
+            isTo={from.id === props.meId}
+            key={id}
+          />
+        ))}
+      </>
+    )
   );
 };
 
-const ChatRoom = ({ data }) => {
+const NewMessagesWithData = ({ roomId, meId }) => {
+  const { subscribeToMore, ...result } = useQuery(SEE_CHAT_ROOM, {
+    variables: { id: roomId },
+    fetchPolicy: "network-only",
+  });
+
+  return (
+    !result.loading && (
+      <>
+        <ChattingBox
+          {...result}
+          meId={meId}
+          subscribeToNewMessages={() => {
+            subscribeToMore({
+              document: NEW_MESSAGE_SUBSCRIPTION,
+              variables: {
+                id: roomId,
+              },
+              updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData.data) return prev;
+                const newMessageItem = subscriptionData.data.newMessage;
+                return Object.assign({}, prev, {
+                  seeChatRoom: {
+                    messages: [newMessageItem, ...prev.seeChatRoom.messages],
+                  },
+                });
+              },
+            });
+          }}
+        />
+      </>
+    )
+  );
+};
+
+const ChatRoom = ({ roomId }) => {
   const content = useInput("");
-  const { id, messages } = data;
+  const scrollRef = useRef();
 
   const me = useQuery(ME);
   const [sendMessageMutation] = useMutation(SEND_MESSAGE, {
     variables: {
-      chatRoomId: id,
+      chatRoomId: roomId,
       message: content.value,
     },
   });
@@ -140,18 +185,8 @@ const ChatRoom = ({ data }) => {
     <Container>
       {!me.loading && (
         <>
-          <ChatBoxWrapper>
-            {messages.map(({ id, text, createdAt, from }) => {
-              return (
-                <MessageBox
-                  isTo={from.id === me.data.id}
-                  fullName={from.fullName}
-                  date={createdAt}
-                  text={text}
-                />
-              );
-            })}
-            <NewMessage roomId={id} meId={me.data.id} />
+          <ChatBoxWrapper ref={scrollRef}>
+            <NewMessagesWithData roomId={roomId} meId={me.data.id} />
           </ChatBoxWrapper>
           <InputBoxWrapper>
             <SendContentInput
@@ -160,8 +195,8 @@ const ChatRoom = ({ data }) => {
                   if (event.target.value !== "") {
                     await sendMessageMutation();
                     event.target.value = "";
+                    event.preventDefault();
                   }
-                  event.preventDefault();
                 }
               }}
               value={""}
