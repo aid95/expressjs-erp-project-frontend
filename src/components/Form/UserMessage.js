@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, Modal } from "react-bootstrap";
+import Button from "@material-ui/core/Button";
+import { Modal } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import { SEND_MAIL } from "../../Routes/Profile/ProfileQueries";
 import useInput from "../../Hooks/useInput";
-import { UserSearchInput } from "../SearchInput";
 import Input, { MultiLineInput } from "../Input";
 import { gql } from "apollo-boost";
 
@@ -164,10 +164,12 @@ const ReplyMailModal = (props) => {
         </ModalContainer>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant={"danger"} onClick={cancelClick}>
+        <Button color={"secondary"} onClick={cancelClick}>
           취소
         </Button>
-        <Button onClick={completeClick}>보내기</Button>
+        <Button color={"primary"} onClick={completeClick}>
+          보내기
+        </Button>
       </Modal.Footer>
     </Modal>
   );

@@ -9,6 +9,8 @@ import {
   ContentLeftList,
   ContentLeftSide,
   ContentTitle,
+  ModalInputWrapper,
+  ModalContainer,
 } from "./ContentStyles";
 import {
   ContentList,
@@ -17,28 +19,13 @@ import {
 import { SEE_FULL_MAIL, SEE_MAILS, SEND_MAIL } from "../../ProfileQueries";
 import UserMessage from "../../../../Components/Form/UserMessage";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import styled from "styled-components";
+import Button from "@material-ui/core/Button";
 import Input, { MultiLineInput } from "../../../../Components/Input";
 import useInput from "../../../../Hooks/useInput";
 import { UserSearchInput } from "../../../../Components/SearchInput";
 import { toast } from "react-toastify";
 
 const POLL_INTERVAL = 2000;
-
-const ModalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ModalInputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 10px 0;
-`;
 
 const NewMailModal = (props) => {
   const subject = useInput("");
@@ -98,6 +85,7 @@ const NewMailModal = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button
+          color={"primary"}
           onClick={async (e) => {
             if (user !== "" && subject !== "" && content !== "") {
               await sendMail();
@@ -156,7 +144,9 @@ export const MailContent = () => {
   });
 
   useEffect(() => {
-    queryViewItem();
+    if (selectedItemId !== "") {
+      queryViewItem();
+    }
     return () => {};
   }, [selectedItemId, queryViewItem]);
 
