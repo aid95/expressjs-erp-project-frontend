@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
+import Button from "@material-ui/core/Button";
 import SelectSearch from "react-select-search";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
@@ -84,6 +84,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
 `;
 
 const ContentHeader = styled.div`
@@ -343,10 +344,12 @@ const NewTaskModal = (props) => {
           </ModalContainer>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant={"danger"} onClick={cancelClick}>
+          <Button color={"secondary"} onClick={cancelClick}>
             취소
           </Button>
-          <Button onClick={completeClick}>저장</Button>
+          <Button color={"primary"} onClick={completeClick}>
+            저장
+          </Button>
         </Modal.Footer>
       </Modal>
     )
@@ -385,8 +388,8 @@ const DailyJournal = ({ data, setter }) => {
         ))}
       </ContentBody>
       <ContentFooter>
-        <Button variant="info" onClick={() => setNewTaskModalShow(true)}>
-          새 업무
+        <Button variant="outlined" onClick={() => setNewTaskModalShow(true)}>
+          새 업무 추가
         </Button>
         <NewTaskModal
           journal={id}

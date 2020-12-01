@@ -21,6 +21,7 @@ import {
 } from "../../../../Components/ContentList";
 import DailyJournal from "../../../../Components/Form/DailyJournal";
 import { toast } from "react-toastify";
+import { format } from "date-fns";
 
 const POLL_INTERVAL = 2000;
 
@@ -86,9 +87,10 @@ export const DailyJournalContent = () => {
                 resultGetItems.data.dailyJournals.map((dailyJournal) => (
                   <ContentListItemComp
                     emoji={"💻"}
-                    title={`${new Date(
-                      dailyJournal.createdAt
-                    ).toDateString()} 업무 일지`}
+                    title={`${format(
+                      new Date(dailyJournal.createdAt),
+                      "yyyy년 MM월 dd일 업무 일지"
+                    )}`}
                     subtext={`${new Date(
                       dailyJournal.createdAt
                     ).toDateString()}`}
