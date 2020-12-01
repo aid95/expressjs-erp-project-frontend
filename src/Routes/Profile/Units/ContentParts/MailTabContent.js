@@ -20,6 +20,7 @@ import { SEE_FULL_MAIL, SEE_MAILS, SEND_MAIL } from "../../ProfileQueries";
 import UserMessage from "../../../../Components/Form/UserMessage";
 import Modal from "react-bootstrap/Modal";
 import Button from "@material-ui/core/Button";
+import Badge from "@material-ui/core/Badge";
 import Input, { MultiLineInput } from "../../../../Components/Input";
 import useInput from "../../../../Hooks/useInput";
 import { UserSearchInput } from "../../../../Components/SearchInput";
@@ -150,7 +151,15 @@ export const MailContent = () => {
                 resultGetItems.data.seeMail &&
                 resultGetItems.data.seeMail.map((mail) => (
                   <ContentListItemComp
-                    emoji={"📧"}
+                    emoji={
+                      !mail.isRead ? (
+                        <Badge color={"secondary"} variant={"dot"}>
+                          📧
+                        </Badge>
+                      ) : (
+                        <>📧</>
+                      )
+                    }
                     title={mail.subject}
                     subtext={`@${mail.from.username} ${new Date(
                       mail.createdAt
