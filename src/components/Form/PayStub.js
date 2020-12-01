@@ -108,8 +108,6 @@ const PayStubTotalWrapper = styled(PayStubDetailWrapper)``;
 
 const PayStub = ({ data }) => {
   const {
-    id,
-    user,
     nationalPension,
     healthInsurance,
     employmentInsurance,

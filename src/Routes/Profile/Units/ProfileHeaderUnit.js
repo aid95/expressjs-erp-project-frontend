@@ -14,7 +14,7 @@ import ProfileImage from "../../../Components/ProfileImage";
 import { ME } from "../../../SharedQueries";
 import { CREATE_COMMUTE_TIME, MY_COMMUTETIME } from "../ProfileQueries";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import Button from "@material-ui/core/Button";
 import {
   ModalContainer,
   ModalInputWrapper,
@@ -147,7 +147,9 @@ const ProfileHeaderMenuListItem = styled.li`
 const ViewCommuteTimesModal = (props) => {
   const classes = useStyles();
 
-  const { data, loading } = useQuery(MY_COMMUTETIME);
+  const { data, loading } = useQuery(MY_COMMUTETIME, {
+    fetchPolicy: "network-only",
+  });
   const [isHoliday, setIsHoliday] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(
     new Date(`${format(new Date(), "yyyy-MM-dd")}T09:00`)
@@ -263,6 +265,8 @@ const ViewCommuteTimesModal = (props) => {
                   label="휴무 수당 적용"
                 />
                 <Button
+                  variant={"outlined"}
+                  color={"primary"}
                   onClick={async (e) => {
                     if (selectedStartDate < selectedEndDate) {
                       await createCommuteTimeMutation();
