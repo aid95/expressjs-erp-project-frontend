@@ -9,12 +9,8 @@ import {
   NewButtonStyle,
 } from "./ContentStyles";
 import React, { useEffect, useState } from "react";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import {
-  SEE_DOC_APPROVALS,
-  SEE_FULL_DOC_APPROVAL,
-  SEND_MAIL,
-} from "../../ProfileQueries";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { SEE_DOC_APPROVALS, SEE_FULL_DOC_APPROVAL } from "../../ProfileQueries";
 import {
   ContentList,
   ContentListItemComp,
@@ -28,6 +24,7 @@ import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import gql from "graphql-tag";
+import { ME } from "../../../../SharedQueries";
 
 const POLL_INTERVAL = 2000;
 
@@ -81,9 +78,12 @@ const CREATE_NEW_APPROVAL_DOC = gql`
 `;
 
 const NewApprovalDocModal = (props) => {
+  // Input hooks
   const subject = useInput("");
   const content = useInput("");
   const comment = useInput("");
+
+  // React hooks
   const [approvers, setApprovers] = useState([]);
   const [reviewers, setReviewers] = useState([]);
 
@@ -93,15 +93,7 @@ const NewApprovalDocModal = (props) => {
       reviewers: reviewers.map(({ id }) => id),
       subject: subject.value,
       content: content.value,
-      comment: content.value,
-    },
-  });
-
-  const [sendMail] = useMutation(SEND_MAIL, {
-    variables: {
-      to: approvers,
-      subject: subject.value,
-      content: content.value,
+      comment: comment.value,
     },
   });
 
@@ -129,7 +121,7 @@ const NewApprovalDocModal = (props) => {
         <ModalContainer>
           <ModalInputWrapper>
             <UserSearchInput setUser={appendApprovers} />
-            <ModalInputCaption>결재자 선택</ModalInputCaption>
+            <ModalInputCaption>결재자 </ModalInputCaption>
             <ApproverList>
               {approvers.map((approver) => (
                 <ApproverItem>{approver.fullName}</ApproverItem>
@@ -138,7 +130,7 @@ const NewApprovalDocModal = (props) => {
           </ModalInputWrapper>
           <ModalInputWrapper>
             <UserSearchInput setUser={appendReviewers} />
-            <ModalInputCaption>참고인 선택</ModalInputCaption>
+            <ModalInputCaption>참고인 </ModalInputCaption>
             <ApproverList>
               {reviewers.map((reviewer) => (
                 <ApproverItem>{reviewer.fullName}</ApproverItem>
@@ -164,10 +156,12 @@ const NewApprovalDocModal = (props) => {
       <Modal.Footer>
         <Button
           onClick={async (e) => {
-            if (approvers !== "" && subject !== "" && content !== "") {
-              await sendMail();
+            if (approvers.length !== 0 && subject !== "" && content !== "") {
+              await createDocApproval();
+              setApprovers([]);
               subject.setValue("");
               content.setValue("");
+              comment.setValue("");
               props.onHide();
             } else {
               toast.error("양식을 채워주세요.");
@@ -199,6 +193,7 @@ const NewApprovalDocButton = () => {
 
 export const ApprovalDocContent = () => {
   const [selectedItemId, setSelectedItemId] = useState("");
+  const { loading, data } = useQuery(ME);
 
   const [queryGetItems, resultGetItems] = useLazyQuery(SEE_DOC_APPROVALS, {
     pollInterval: POLL_INTERVAL,
@@ -234,12 +229,18 @@ export const ApprovalDocContent = () => {
           <ContentLeftList>
             <ContentList>
               {!resultGetItems.loading &&
+                !loading &&
                 resultGetItems.data &&
                 resultGetItems.data.seeDocApproval &&
                 resultGetItems.data.seeDocApproval.map((approvalDoc) => {
+                  const isMe =
+                    approvalDoc.currentApprover.approver.id === data.me.id;
+                  console.log(approvalDoc);
                   return (
                     <ContentListItemComp
-                      emoji={"📝"}
+                      emoji={
+                        approvalDoc.state === "DONE" ? "💯" : isMe ? "📝" : "📄"
+                      }
                       title={approvalDoc.subject}
                       subtext={`@${approvalDoc.drafter.username} ${new Date(
                         approvalDoc.createdAt

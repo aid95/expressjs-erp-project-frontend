@@ -40,6 +40,7 @@ export const SEE_DOC_APPROVALS = gql`
     seeDocApproval {
       id
       subject
+      state
       drafter {
         username
       }
@@ -59,6 +60,7 @@ export const SEE_FULL_DOC_APPROVAL = gql`
   query seeFullDocApproval($id: String!) {
     seeFullDocApproval(id: $id) {
       id
+      state
       subject
       content
       comment
