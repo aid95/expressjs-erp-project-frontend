@@ -144,11 +144,14 @@ const ProfileHeaderMenuListItem = styled.li`
   align-items: center;
 `;
 
+const POLL_INTERVAL = 2000;
+
 const ViewCommuteTimesModal = (props) => {
   const classes = useStyles();
 
   const { data, loading } = useQuery(MY_COMMUTETIME, {
     fetchPolicy: "network-only",
+    pollInterval: POLL_INTERVAL,
   });
   const [isHoliday, setIsHoliday] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(
@@ -165,7 +168,7 @@ const ViewCommuteTimesModal = (props) => {
           야간: nightShiftTime,
           연장: overWorkTime + nightShiftTime,
           일반: workTime,
-          날짜: format(new Date(workDateTime), "yyyy년 MM월 dd일"),
+          날짜: format(new Date(workDateTime), "yy.MM.dd"),
         };
       }
     );
