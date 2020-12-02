@@ -232,3 +232,19 @@ export const SEE_CHAT_ROOM = gql`
     }
   }
 `;
+
+export const SEE_USERS = gql`
+  {
+    users {
+      id
+      fullName
+      username
+      department {
+        title
+      }
+      rank {
+        title
+      }
+    }
+  }
+`;

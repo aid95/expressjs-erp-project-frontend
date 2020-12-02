@@ -7,8 +7,8 @@ import Dashboard from "../Routes/Dashboard";
 
 const LoggedInRoutes = () => (
   <Switch>
-    <Route exact path="/" component={Dashboard} />
-    <Route path="/:username" component={Profile} />
+    <Route exact path="/" component={Profile} />
+    <Route path="/:username" component={Dashboard} />
     <Redirect from="*" to="/" />
   </Switch>
 );

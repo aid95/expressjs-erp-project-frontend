@@ -7,6 +7,7 @@ import { MailContent } from "./Units/ContentParts/MailTabContent";
 import { ApprovalDocContent } from "./Units/ContentParts/ApprovalDocTabContent";
 import { PayStubTabContent } from "./Units/ContentParts/PayStubTabContent";
 import { ChatContent } from "./Units/ContentParts/ChatTabContent";
+import { HRTabContent } from "./Units/ContentParts/HRTabContent";
 
 const Container = styled.div`
   width: 100%;
@@ -76,6 +77,11 @@ const ProfilePresenter = ({ subMenuState }) => {
               채팅
             </MenubarListItem>
           </SubMenuLink>
+          <SubMenuLink onClick={() => setSubMenu("hrMenu")}>
+            <MenubarListItem selected={subMenu === "hrMenu"}>
+              인사
+            </MenubarListItem>
+          </SubMenuLink>
         </MenubarList>
       </MenubarWrapper>
 
@@ -84,6 +90,7 @@ const ProfilePresenter = ({ subMenuState }) => {
       {subMenu === "docsMenu" && <ApprovalDocContent />}
       {subMenu === "payStubMenu" && <PayStubTabContent />}
       {subMenu === "chatMenu" && <ChatContent />}
+      {subMenu === "hrMenu" && <HRTabContent />}
     </Container>
   );
 };
