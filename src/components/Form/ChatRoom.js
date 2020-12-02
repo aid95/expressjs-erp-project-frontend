@@ -10,7 +10,7 @@ import { SEE_CHAT_ROOM } from "../../Routes/Profile/ProfileQueries";
 const MessageContainer = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: ${(props) => (props.isTo ? "row" : "row-reverse")};
+  flex-direction: ${(props) => (!props.isTo ? "row" : "row-reverse")};
   margin-bottom: 20px;
 `;
 
@@ -175,12 +175,13 @@ const ChatRoom = ({ roomId }) => {
     },
   });
 
+  console.log(me);
   return (
     <Container>
       {!me.loading && (
         <>
           <ChatBoxWrapper ref={scrollRef}>
-            <NewMessagesWithData roomId={roomId} meId={me.data.id} />
+            <NewMessagesWithData roomId={roomId} meId={me.data.me.id} />
           </ChatBoxWrapper>
           <InputBoxWrapper>
             <SendContentInput
