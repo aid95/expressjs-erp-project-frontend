@@ -216,7 +216,7 @@ const ApproveDoc = (data) => {
       <ApproversWrapper>
         결재자&nbsp;:&nbsp;
         <ApproversList>
-          {approvers.reverse().map(({ id, approver, isPass }) => {
+          {approvers.map(({ id, approver, isPass }) => {
             const { username } = approver;
             return (
               <ApproversItem id={id} key={id} isPass={isPass}>
@@ -243,35 +243,35 @@ const ApproveDoc = (data) => {
             setApprovalDocModal(false);
           }}
         />
-        {!me.loading &&
-          state !== "DONE" &&
-          me.data.me.id === currentApprover.approver.id && (
-            <DocFootList>
-              <DocFootListItem>
-                <Button
-                  onClick={(event) => {
-                    setAction(true);
-                    setApprovalDocModal(true);
-                  }}
-                  variant="outlined"
-                >
-                  결재 승인
-                </Button>
-              </DocFootListItem>
-              <DocFootListItem>
-                <Button
-                  onClick={(event) => {
-                    setAction(false);
-                    setApprovalDocModal(true);
-                  }}
-                  variant="outlined"
-                  color={"secondary"}
-                >
-                  결재 반려
-                </Button>
-              </DocFootListItem>
-            </DocFootList>
-          )}
+        {(!me.loading && state !== "DONE") ||
+          (state !== "REJECT" &&
+            me.data.me.id === currentApprover.approver.id && (
+              <DocFootList>
+                <DocFootListItem>
+                  <Button
+                    onClick={(event) => {
+                      setAction(true);
+                      setApprovalDocModal(true);
+                    }}
+                    variant="outlined"
+                  >
+                    결재 승인
+                  </Button>
+                </DocFootListItem>
+                <DocFootListItem>
+                  <Button
+                    onClick={(event) => {
+                      setAction(false);
+                      setApprovalDocModal(true);
+                    }}
+                    variant="outlined"
+                    color={"secondary"}
+                  >
+                    결재 반려
+                  </Button>
+                </DocFootListItem>
+              </DocFootList>
+            ))}
       </DocFootWrapper>
     </Container>
   );

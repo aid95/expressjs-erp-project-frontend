@@ -123,8 +123,17 @@ const NewApprovalDocModal = (props) => {
             <UserSearchInput setUser={appendApprovers} />
             <ModalInputCaption>결재자 </ModalInputCaption>
             <ApproverList>
-              {approvers.map((approver) => (
-                <ApproverItem>{approver.fullName}</ApproverItem>
+              {approvers.map((approver, index) => (
+                <ApproverItem
+                  id={index}
+                  onClick={(e) => {
+                    let array = [...approvers]; // make a separate copy of the array
+                    array.splice(e.target.id, 1);
+                    setApprovers(array);
+                  }}
+                >
+                  {index + 1}.{approver.fullName}
+                </ApproverItem>
               ))}
             </ApproverList>
           </ModalInputWrapper>
@@ -132,8 +141,17 @@ const NewApprovalDocModal = (props) => {
             <UserSearchInput setUser={appendReviewers} />
             <ModalInputCaption>참고인 </ModalInputCaption>
             <ApproverList>
-              {reviewers.map((reviewer) => (
-                <ApproverItem>{reviewer.fullName}</ApproverItem>
+              {reviewers.map((reviewer, index) => (
+                <ApproverItem
+                  id={index}
+                  onClick={(e) => {
+                    let array = [...reviewers]; // make a separate copy of the array
+                    array.splice(e.target.id, 1);
+                    setReviewers(array);
+                  }}
+                >
+                  {reviewer.fullName}
+                </ApproverItem>
               ))}
             </ApproverList>
           </ModalInputWrapper>
@@ -196,10 +214,12 @@ export const ApprovalDocContent = () => {
   const { loading, data } = useQuery(ME);
 
   const [queryGetItems, resultGetItems] = useLazyQuery(SEE_DOC_APPROVALS, {
+    fetchPolicy: "network-only",
     pollInterval: POLL_INTERVAL,
   });
 
   const [queryViewItem, resultViewItem] = useLazyQuery(SEE_FULL_DOC_APPROVAL, {
+    fetchPolicy: "network-only",
     variables: { id: selectedItemId },
   });
 
@@ -238,7 +258,13 @@ export const ApprovalDocContent = () => {
                   return (
                     <ContentListItemComp
                       emoji={
-                        approvalDoc.state === "DONE" ? "💯" : isMe ? "📝" : "📄"
+                        approvalDoc.state === "DONE"
+                          ? "💯"
+                          : approvalDoc.state === "REJECT"
+                          ? "❌"
+                          : isMe
+                          ? "📝"
+                          : "📄"
                       }
                       title={approvalDoc.subject}
                       subtext={`@${approvalDoc.drafter.username} ${new Date(
