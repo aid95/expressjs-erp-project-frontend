@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import SelectSearch from "react-select-search";
 import "../searchInputStyle.css";
-import { useLazyQuery } from "@apollo/client";
-import { SEARCH_USERS } from "../SharedQueries";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { GET_DEPARTMENTS, GET_RANKS, SEARCH_USERS } from "../SharedQueries";
 
 export const JusoSearchInput = ({
   setAddress,
@@ -58,6 +58,7 @@ export const UserSearchInput = ({ setUser }) => {
 
   return (
     <SelectSearch
+      options={[]}
       getOptions={(query) => {
         return new Promise((resolve, reject) => {
           setTerm(query);
@@ -81,15 +82,18 @@ export const DepartmentSearchInput = ({
   setDepartment,
   placeHolder = "부서",
 }) => {
-  const [users, setUsers] = useState([]);
-  const [term, setTerm] = useState("");
+  const [departments, setDepartments] = useState([]);
 
-  const [getUsers] = useLazyQuery(SEARCH_USERS, {
-    variables: {
-      term: term,
-    },
+  useQuery(GET_DEPARTMENTS, {
     fetchPolicy: "network-only",
-    onCompleted: (d) => setUsers(d.searchUser),
+    onCompleted: (d) => {
+      setDepartments(
+        d.departments.map(({ id, title }) => ({
+          value: id,
+          name: title,
+        }))
+      );
+    },
   });
 
   const onChange = (e) => {
@@ -98,35 +102,26 @@ export const DepartmentSearchInput = ({
 
   return (
     <SelectSearch
-      getOptions={(query) => {
-        return new Promise((resolve, reject) => {
-          setTerm(query);
-          getUsers();
-          resolve(
-            users.map(({ id, username, fullName }) => ({
-              value: { id, username, fullName },
-              name: `${fullName} @${username}`,
-            }))
-          );
-        });
-      }}
-      search
       placeholder={placeHolder}
       onChange={onChange}
+      options={departments}
     />
   );
 };
 
 export const RankSearchInput = ({ setDepartment, placeHolder = "직급" }) => {
-  const [users, setUsers] = useState([]);
-  const [term, setTerm] = useState("");
+  const [ranks, setRanks] = useState([]);
 
-  const [getUsers] = useLazyQuery(SEARCH_USERS, {
-    variables: {
-      term: term,
-    },
+  useQuery(GET_RANKS, {
     fetchPolicy: "network-only",
-    onCompleted: (d) => setUsers(d.searchUser),
+    onCompleted: (d) => {
+      setRanks(
+        d.ranks.map(({ id, title }) => ({
+          value: id,
+          name: title,
+        }))
+      );
+    },
   });
 
   const onChange = (e) => {
@@ -135,19 +130,7 @@ export const RankSearchInput = ({ setDepartment, placeHolder = "직급" }) => {
 
   return (
     <SelectSearch
-      getOptions={(query) => {
-        return new Promise((resolve, reject) => {
-          setTerm(query);
-          getUsers();
-          resolve(
-            users.map(({ id, username, fullName }) => ({
-              value: { id, username, fullName },
-              name: `${fullName} @${username}`,
-            }))
-          );
-        });
-      }}
-      search
+      options={ranks}
       placeholder={placeHolder}
       onChange={onChange}
     />

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
 import {
   DepartmentSearchInput,
@@ -16,6 +16,7 @@ import {
 import MomentUtils from "@date-io/moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField } from "@material-ui/core";
+import { EDIT_USER } from "../../Routes/Profile/ProfileQueries";
 
 const SEE_USER = gql`
   query user($id: String!) {
@@ -115,8 +116,56 @@ const UserEdit = ({ userId }) => {
   const lastName = useInput("");
   const email = useInput("");
   const addressDetail = useInput("");
+  const basePay = useInput("");
+  const department = useInput("");
+  const rank = useInput("");
 
-  const onSubmit = () => {};
+  const [editUserMutation] = useMutation(EDIT_USER);
+
+  const onEditClick = async () => {
+    let variables = {
+      id: userId,
+      birthDay: selectedDate.toISOString(),
+      action: "EDIT",
+    };
+    if (firstName.value !== "") {
+      variables.firstName = firstName.value;
+    }
+    if (lastName.value !== "") {
+      variables.lastName = lastName.value;
+    }
+    if (email.value !== "") {
+      variables.email = email;
+    }
+    if (addressDetail.value !== "") {
+      variables.addressDetail = addressDetail.value;
+    }
+    if (address !== "") {
+      variables.address = address;
+    }
+    if (basePay.value !== "") {
+      variables.basePay = parseInt(basePay.value);
+    }
+    if (department.value !== "") {
+      variables.department = department.value;
+    }
+    if (rank.value !== "") {
+      variables.rank = rank.value;
+    }
+    console.log(variables);
+    await editUserMutation({
+      variables,
+    });
+  };
+
+  const onDeleteClick = async () => {
+    await editUserMutation({
+      variables: {
+        id: userId,
+        action: "DELETE",
+      },
+    });
+  };
 
   const onDateChange = (e) => {
     setSelectedDate(e);
@@ -128,7 +177,7 @@ const UserEdit = ({ userId }) => {
       <Container>
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <FormWrapper>
-            <form className={classes.root} onSubmit={onSubmit}>
+            <form className={classes.root} onSubmit={onEditClick}>
               <Padded>
                 <W100TextField
                   disabled
@@ -141,11 +190,23 @@ const UserEdit = ({ userId }) => {
                 <InlineContainer>
                   <W100TextField
                     defaultValue={data.user.firstName}
+                    onChange={(event) => {
+                      const {
+                        target: { value },
+                      } = event;
+                      firstName.setValue(value);
+                    }}
                     id="standard-basic"
                     label="이름"
                   />
                   <W100TextField
                     defaultValue={data.user.lastName}
+                    onChange={(event) => {
+                      const {
+                        target: { value },
+                      } = event;
+                      lastName.setValue(value);
+                    }}
                     id="standard-basic"
                     label="성"
                   />
@@ -154,6 +215,12 @@ const UserEdit = ({ userId }) => {
               <Padded>
                 <W100TextField
                   defaultValue={data.user.basePay}
+                  onChange={(event) => {
+                    const {
+                      target: { value },
+                    } = event;
+                    basePay.setValue(value);
+                  }}
                   id="standard-basic"
                   label="연봉"
                 />
@@ -163,13 +230,13 @@ const UserEdit = ({ userId }) => {
                   <DeptWrapper>
                     <DepartmentSearchInput
                       placeHolder={data.user.department.title}
-                      setDepartment={(e) => console.log(e)}
+                      setDepartment={department.setValue}
                     />
                   </DeptWrapper>
                   <RankWrapper>
                     <RankSearchInput
                       placeHolder={data.user.rank.title}
-                      setDepartment={(e) => console.log(e)}
+                      setDepartment={rank.setValue}
                     />
                   </RankWrapper>
                 </InlineContainer>
@@ -179,7 +246,7 @@ const UserEdit = ({ userId }) => {
                 id="date-picker-dialog"
                 label="🎉 생년월일"
                 format="MM/dd/yyyy"
-                value={selectedDate}
+                value={new Date(data.user.birthDay)}
                 onChange={onDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
@@ -194,18 +261,32 @@ const UserEdit = ({ userId }) => {
               <Padded>
                 <W100TextField
                   defaultValue={data.user.addressDetail}
+                  onChange={(event) => {
+                    const {
+                      target: { value },
+                    } = event;
+                    addressDetail.setValue(value);
+                  }}
                   id="standard-basic"
                   label="상세주소"
                 />
               </Padded>
               <InlineContainer>
                 <UpdateButton>
-                  <Button variant={"outlined"} color={"primary"}>
+                  <Button
+                    onClick={(event) => onEditClick()}
+                    variant={"outlined"}
+                    color={"primary"}
+                  >
                     수정
                   </Button>
                 </UpdateButton>
                 <DeleteButton>
-                  <Button variant={"outlined"} color={"secondary"}>
+                  <Button
+                    onClick={(event) => onDeleteClick()}
+                    variant={"outlined"}
+                    color={"secondary"}
+                  >
                     삭제
                   </Button>
                 </DeleteButton>

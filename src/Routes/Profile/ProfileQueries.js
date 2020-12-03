@@ -248,3 +248,33 @@ export const SEE_USERS = gql`
     }
   }
 `;
+
+export const EDIT_USER = gql`
+  mutation editUser(
+    $id: String!
+    $email: String
+    $firstName: String
+    $lastName: String
+    $basePay: Int
+    $rank: String
+    $department: String
+    $address: String
+    $addressDetail: String
+    $birthDay: String
+    $action: ACTION!
+  ) {
+    editUser(
+      id: $id
+      email: $email
+      firstName: $firstName
+      lastName: $lastName
+      basePay: $basePay
+      rank: $rank
+      department: $department
+      address: $address
+      addressDetail: $addressDetail
+      birthDay: $birthDay
+      action: $action
+    )
+  }
+`;

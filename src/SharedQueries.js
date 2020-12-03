@@ -35,3 +35,21 @@ export const SEND_MESSAGE = gql`
     }
   }
 `;
+
+export const GET_DEPARTMENTS = gql`
+  {
+    departments {
+      id
+      title
+    }
+  }
+`;
+
+export const GET_RANKS = gql`
+  {
+    ranks {
+      id
+      title
+    }
+  }
+`;
