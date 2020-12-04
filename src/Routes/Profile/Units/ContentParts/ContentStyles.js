@@ -54,7 +54,6 @@ export const ContentTitle = styled.p`
   font-weight: 400;
   text-align: center;
   padding-bottom: 20px;
-  border-bottom: 1px solid #0000000f;
 `;
 
 export const ContentWrapper = styled.div`
@@ -64,7 +63,10 @@ export const ContentWrapper = styled.div`
 
 export const ContentLeftSide = styled.div``;
 
-export const ContentLeftHeader = styled.div``;
+export const ContentLeftHeader = styled.div`
+  margin-right: 15px;
+  border-bottom: 1px solid #0000000f;
+`;
 
 export const ContentLeftList = styled(SCROLLBAR_STYLE)`
   height: 400px;

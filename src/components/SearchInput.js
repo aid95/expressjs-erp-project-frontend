@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import SelectSearch from "react-select-search";
 import "../searchInputStyle.css";
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_DEPARTMENTS, GET_RANKS, SEARCH_USERS } from "../SharedQueries";
+import {
+  GET_DEPARTMENTS,
+  GET_RANKS,
+  SEARCH_USERS,
+  SEARCH_DEPT_USER,
+} from "../SharedQueries";
 
 export const JusoSearchInput = ({
   setAddress,
@@ -40,7 +45,7 @@ ord=${query}&confmKey=devU01TX0FVVEgyMDIwMTExODIxMzQxMDExMDQzNjU=&resultType=jso
   );
 };
 
-export const UserSearchInput = ({ setUser }) => {
+export const UserSearchInput = ({ setUser, placeHolder = "사용자 찾기" }) => {
   const [users, setUsers] = useState([]);
   const [term, setTerm] = useState("");
 
@@ -49,7 +54,9 @@ export const UserSearchInput = ({ setUser }) => {
       term: term,
     },
     fetchPolicy: "network-only",
-    onCompleted: (d) => setUsers(d.searchUser),
+    onCompleted: (d) => {
+      setUsers(d.searchUser);
+    },
   });
 
   const onChange = (e) => {
@@ -58,21 +65,69 @@ export const UserSearchInput = ({ setUser }) => {
 
   return (
     <SelectSearch
-      options={[]}
       getOptions={(query) => {
         return new Promise((resolve, reject) => {
           setTerm(query);
           getUsers();
           resolve(
-            users.map(({ id, username, fullName }) => ({
-              value: { id, username, fullName },
-              name: `${fullName} @${username}`,
-            }))
+            users.map(({ id, username, fullName }) => {
+              return {
+                value: { id, username, fullName },
+                name: `${fullName} @${username}`,
+              };
+            })
           );
         });
       }}
       search
-      placeholder="수신자"
+      placeholder={placeHolder}
+      onChange={onChange}
+    />
+  );
+};
+
+export const DeptUserSearchInput = ({
+  setUser,
+  placeHolder = "부서장 찾기",
+  deptId,
+}) => {
+  const [users, setUsers] = useState([]);
+  const [term, setTerm] = useState("");
+
+  const [getUsers] = useLazyQuery(SEARCH_DEPT_USER, {
+    variables: {
+      term: term,
+      deptId,
+    },
+    fetchPolicy: "network-only",
+    onCompleted: (d) => {
+      console.log(d);
+      setUsers(d.searchDeptUser);
+    },
+  });
+
+  const onChange = (e) => {
+    setUser(e);
+  };
+
+  return (
+    <SelectSearch
+      getOptions={(query) => {
+        return new Promise((resolve, reject) => {
+          setTerm(query);
+          getUsers();
+          resolve(
+            users.map(({ id, username, fullName }) => {
+              return {
+                value: { id, username, fullName },
+                name: `${fullName} @${username}`,
+              };
+            })
+          );
+        });
+      }}
+      search
+      placeholder={placeHolder}
       onChange={onChange}
     />
   );

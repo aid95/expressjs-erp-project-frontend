@@ -8,6 +8,7 @@ import { ApprovalDocContent } from "./Units/ContentParts/ApprovalDocTabContent";
 import { PayStubTabContent } from "./Units/ContentParts/PayStubTabContent";
 import { ChatContent } from "./Units/ContentParts/ChatTabContent";
 import { HRTabContent } from "./Units/ContentParts/HRTabContent";
+import { DeptTabContent } from "./Units/ContentParts/DeptTabContent";
 
 const Container = styled.div`
   width: 100%;
@@ -82,6 +83,11 @@ const ProfilePresenter = ({ subMenuState }) => {
               인사
             </MenubarListItem>
           </SubMenuLink>
+          <SubMenuLink onClick={() => setSubMenu("deptMenu")}>
+            <MenubarListItem selected={subMenu === "deptMenu"}>
+              부서
+            </MenubarListItem>
+          </SubMenuLink>
         </MenubarList>
       </MenubarWrapper>
 
@@ -91,6 +97,7 @@ const ProfilePresenter = ({ subMenuState }) => {
       {subMenu === "payStubMenu" && <PayStubTabContent />}
       {subMenu === "chatMenu" && <ChatContent />}
       {subMenu === "hrMenu" && <HRTabContent />}
+      {subMenu === "deptMenu" && <DeptTabContent />}
     </Container>
   );
 };

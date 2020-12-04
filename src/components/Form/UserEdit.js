@@ -152,7 +152,6 @@ const UserEdit = ({ userId }) => {
     if (rank.value !== "") {
       variables.rank = rank.value;
     }
-    console.log(variables);
     await editUserMutation({
       variables,
     });

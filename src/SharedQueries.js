@@ -53,3 +53,13 @@ export const GET_RANKS = gql`
     }
   }
 `;
+
+export const SEARCH_DEPT_USER = gql`
+  query searchDeptUser($deptId: String!, $term: String!) {
+    searchDeptUser(deptId: $deptId, term: $term) {
+      id
+      fullName
+      username
+    }
+  }
+`;
