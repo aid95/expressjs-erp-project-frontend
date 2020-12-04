@@ -10,6 +10,7 @@ export const SEE_MAILS = gql`
       subject
       content
       createdAt
+      isRead
     }
   }
 `;

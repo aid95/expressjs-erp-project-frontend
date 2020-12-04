@@ -14,6 +14,12 @@ export const ME = gql`
         title
       }
       birthDay
+      newMail {
+        id
+      }
+      pendingDoc {
+        id
+      }
     }
   }
 `;

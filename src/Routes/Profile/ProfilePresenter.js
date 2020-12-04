@@ -20,6 +20,9 @@ const Container = styled.div`
 
 // Menubar CSS
 const MenubarWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin: 20px 0;
 `;
 
@@ -40,7 +43,6 @@ const SubMenuLink = styled.a`
 `;
 
 const ProfilePresenter = ({ subMenuState }) => {
-  //
   const { setSubMenu, subMenu } = subMenuState;
 
   return (

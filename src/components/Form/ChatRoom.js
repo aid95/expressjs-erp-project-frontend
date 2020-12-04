@@ -175,7 +175,6 @@ const ChatRoom = ({ roomId }) => {
     },
   });
 
-  console.log(me);
   return (
     <Container>
       {!me.loading && (

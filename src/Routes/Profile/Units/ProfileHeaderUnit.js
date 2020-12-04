@@ -304,7 +304,7 @@ const ProfileHeaderUnit = () => {
             <ProfileImage
               width={180}
               height={180}
-              src="https://scontent-nrt1-1.xx.fbcdn.net/v/t1.0-1/p148x148/104424755_3039633629484044_5461704554360702412_n.jpg?_nc_cat=101&ccb=2&_nc_sid=1eb0c7&_nc_ohc=tnW7u5R3wPMAX--esRG&_nc_ht=scontent-nrt1-1.xx&tp=6&oh=2e2fe9b80e599da46b8299464dd1aa48&oe=5FC7DEF4"
+              src="https://i.pinimg.com/originals/a0/c8/9f/a0c89f5a39bf5d5861d6624406d2e20f.jpg"
               alt="profile image"
             />
           </ProfileImageWrapper>
@@ -347,21 +347,25 @@ const ProfileHeaderUnit = () => {
                   <br />
                   <Timer size={64} />
                   <br />
-                  <SubTextDeco size={24}>0</SubTextDeco>
+                  <SubTextDeco size={24}></SubTextDeco>
                 </ProfileHeaderMenuListItem>
                 <ProfileHeaderMenuListItem>
                   <SubTextDeco size={20}>결재 대기</SubTextDeco>
                   <br />
                   <Document size={64} />
                   <br />
-                  <SubTextDeco size={24}>0</SubTextDeco>
+                  <SubTextDeco size={24}>
+                    {data.me.newMail.length} 개
+                  </SubTextDeco>
                 </ProfileHeaderMenuListItem>
                 <ProfileHeaderMenuListItem>
                   <SubTextDeco size={20}>메시지</SubTextDeco>
                   <br />
                   <LightTalkBubble size={64} />
                   <br />
-                  <SubTextDeco size={24}>0</SubTextDeco>
+                  <SubTextDeco size={24}>
+                    {data.me.newMail.length} 개
+                  </SubTextDeco>
                 </ProfileHeaderMenuListItem>
               </ProfileHeaderMenuList>
             </ProfileInfoRight>
