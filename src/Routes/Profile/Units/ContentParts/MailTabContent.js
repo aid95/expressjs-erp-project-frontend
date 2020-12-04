@@ -74,7 +74,7 @@ const NewMailModal = (props) => {
         <Button
           color={"primary"}
           onClick={async (e) => {
-            if (user !== "" && subject !== "" && content !== "") {
+            if (user !== "" && subject.value !== "" && content.value !== "") {
               await sendMail();
               subject.setValue("");
               content.setValue("");
