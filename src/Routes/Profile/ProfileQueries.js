@@ -312,3 +312,76 @@ export const EDIT_USER = gql`
     )
   }
 `;
+
+export const SEE_DEPARTMENT = gql`
+  query seeDepartment($id: String!) {
+    seeDepartment(id: $id) {
+      id
+      title
+      leaderUser {
+        id
+        fullName
+        username
+      }
+    }
+  }
+`;
+
+export const SEE_DEPT_USERS = gql`
+  query deptUsers($id: String!) {
+    deptUsers(id: $id) {
+      id
+      fullName
+      username
+      email
+    }
+  }
+`;
+
+export const EDIT_DEPT = gql`
+  mutation editDepartment(
+    $id: String!
+    $title: String
+    $leaderUser: String
+    $action: ACTIONS!
+  ) {
+    editDepartment(
+      id: $id
+      title: $title
+      leaderUser: $leaderUser
+      action: $action
+    )
+  }
+`;
+
+export const CREATE_DEPARTMENT = gql`
+  mutation createDepartment($title: String!) {
+    createDepartment(title: $title)
+  }
+`;
+
+export const SEARCH_USER = gql`
+  query searchUser(
+    $term: String
+    $beginDate: String
+    $endDate: String
+    $deptName: String
+  ) {
+    searchUser(
+      term: $term
+      beginDate: $beginDate
+      endDate: $endDate
+      deptName: $deptName
+    ) {
+      id
+      fullName
+      username
+      department {
+        title
+      }
+      rank {
+        title
+      }
+    }
+  }
+`;
