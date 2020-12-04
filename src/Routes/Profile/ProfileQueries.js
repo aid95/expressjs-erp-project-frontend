@@ -103,8 +103,42 @@ export const SEE_DAILY_JOURNALS = gql`
   {
     dailyJournals {
       id
+      user {
+        fullName
+        id
+        username
+      }
       createdAt
     }
+  }
+`;
+
+export const SEE_TASK = gql`
+  query seeTask($id: String!) {
+    seeTask(id: $id) {
+      id
+      beginDateTime
+      endDateTime
+      comment
+    }
+  }
+`;
+
+export const EDIT_TASK = gql`
+  mutation editTask(
+    $id: String!
+    $comment: String
+    $beginDate: String
+    $endDate: String
+    $action: ACTION!
+  ) {
+    editTask(
+      id: $id
+      comment: $comment
+      beginDate: $beginDate
+      endDate: $endDate
+      action: $action
+    )
   }
 `;
 

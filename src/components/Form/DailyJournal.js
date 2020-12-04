@@ -9,6 +9,7 @@ import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
+import { EDIT_TASK, SEE_TASK } from "../../Routes/Profile/ProfileQueries";
 
 const ContentTableRow = styled.div`
   display: flex;
@@ -47,16 +48,38 @@ const JournalText = styled.p`
   padding: 3px;
 `;
 
+const JournalMenu = styled.ul`
+  display: flex;
+  font-size: 12px;
+`;
+
+const JournalMenuItem = styled.li`
+  padding: 3px;
+  cursor: pointer;
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
+`;
+
 const DateTimeText = styled.span`
   font-size: 20px;
 `;
 
-const JournalItem = ({ categorys, journalText, start, end }) => {
+const JournalItem = ({ taskId, categorys, journalText, start, end }) => {
   const startDate = format(new Date(start), "HH:mm");
   const endDate = format(new Date(end), "HH:mm");
   const subCategory = categorys || "-";
   const middleCategory = subCategory.parentCategory || "-";
   const mainCategory = middleCategory.parentCategory || "-";
+
+  const [modalShow, setModalShow] = React.useState(false);
+
+  const [deleteTaskMutation] = useMutation(EDIT_TASK, {
+    variables: {
+      id: taskId,
+      action: "DELETE",
+    },
+  });
 
   return (
     <ContentTableRow>
@@ -66,6 +89,16 @@ const JournalItem = ({ categorys, journalText, start, end }) => {
             {mainCategory.title} > {middleCategory.title} > {subCategory.title}
           </Categories>
           <JournalText>{journalText}</JournalText>
+          <JournalMenu>
+            <JournalMenuItem
+              id={taskId}
+              onClick={async () => {
+                await deleteTaskMutation();
+              }}
+            >
+              삭제
+            </JournalMenuItem>
+          </JournalMenu>
         </JournalInfoWrapper>
       </ContentTableCell>
       <ContentCenterTableCell cellWidth={20}>
@@ -380,6 +413,7 @@ const DailyJournal = ({ data, setter }) => {
         </ContentTableRow>
         {tasks.map((task) => (
           <JournalItem
+            taskId={task.id}
             categorys={task.category}
             journalText={task.comment}
             start={task.beginDateTime}
