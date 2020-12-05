@@ -17,6 +17,17 @@ import MomentUtils from "@date-io/moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField } from "@material-ui/core";
 import { EDIT_USER } from "../../Routes/Profile/ProfileQueries";
+import { format } from "date-fns";
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { ModalInputWrapper } from "../../Routes/Profile/Units/ContentParts/ContentStyles";
 
 const SEE_USER = gql`
   query user($id: String!) {
@@ -44,7 +55,8 @@ const SEE_USER = gql`
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   height: 100%;
 `;
@@ -52,7 +64,7 @@ const Container = styled.div`
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 325px;
 `;
 
 const W100KeyboardDatePicker = styled(KeyboardDatePicker)`
@@ -90,6 +102,17 @@ const DeleteButton = styled.div`
   margin-left: 5px;
 `;
 
+const USER_COMMUTETIME = gql`
+  query userCommuteTime($id: String!) {
+    userCommuteTime(id: $id) {
+      workTime
+      overWorkTime
+      nightShiftTime
+      workDateTime
+    }
+  }
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -111,6 +134,7 @@ const UserEdit = ({ userId }) => {
 
   const [address, setAddress] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [commuteTimes, setCommuteTimes] = useState([]);
 
   const firstName = useInput("");
   const lastName = useInput("");
@@ -121,6 +145,25 @@ const UserEdit = ({ userId }) => {
   const rank = useInput("");
 
   const [editUserMutation] = useMutation(EDIT_USER);
+  useQuery(USER_COMMUTETIME, {
+    variables: {
+      id: userId,
+    },
+    onCompleted: (d) => setCommuteTimes(d.userCommuteTime),
+  });
+  const commuteTimeToGraphData = (commuteTimeList) => {
+    const data = commuteTimeList.map(
+      ({ nightShiftTime, overWorkTime, workDateTime, workTime }) => {
+        return {
+          야간: nightShiftTime,
+          연장: overWorkTime + nightShiftTime,
+          일반: workTime,
+          날짜: format(new Date(workDateTime), "yy.MM.dd"),
+        };
+      }
+    );
+    return data;
+  };
 
   const onEditClick = async () => {
     let variables = {
@@ -177,6 +220,7 @@ const UserEdit = ({ userId }) => {
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <FormWrapper>
             <form className={classes.root} onSubmit={onEditClick}>
+              <Padded></Padded>
               <Padded>
                 <W100TextField
                   disabled
@@ -292,6 +336,27 @@ const UserEdit = ({ userId }) => {
               </InlineContainer>
             </form>
           </FormWrapper>
+
+          <LineChart
+            width={460}
+            height={200}
+            data={commuteTimeToGraphData(commuteTimes)}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="날짜" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="일반" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="연장" stroke="#de3a50" />
+            <Line type="monotone" dataKey="야간" stroke="#8884d8" />
+          </LineChart>
         </MuiPickersUtilsProvider>
       </Container>
     )

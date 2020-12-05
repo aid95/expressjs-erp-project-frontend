@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   ContentContainer,
   ContentWrapper,
@@ -8,6 +8,7 @@ import {
   ContentLeftList,
   ContentLeftSide,
   ContentTitle,
+  NewButtonStyle,
 } from "./ContentStyles";
 import {
   ContentList,
@@ -16,8 +17,34 @@ import {
 import { SEARCH_USER, SEE_USERS } from "../../ProfileQueries";
 import UserEdit from "../../../../Components/Form/UserEdit";
 import Input from "@material-ui/core/Input";
+import { gql } from "apollo-boost";
 
 const POLL_INTERVAL = 2000;
+
+const ALL_PAY_SALARY = gql`
+  mutation allPaySalary($date: String!) {
+    allPaySalary(date: $date)
+  }
+`;
+
+const PaymentButton = () => {
+  const [allPaySalaryMutation] = useMutation(ALL_PAY_SALARY, {
+    variables: {
+      date: new Date().toISOString(),
+    },
+  });
+  return (
+    <>
+      <NewButtonStyle
+        onClick={async () => {
+          await allPaySalaryMutation();
+        }}
+      >
+        급여 지급 🔥
+      </NewButtonStyle>
+    </>
+  );
+};
 
 export const HRTabContent = () => {
   const [selectedItemId, setSelectedItemId] = useState("");
@@ -91,6 +118,7 @@ export const HRTabContent = () => {
               ))}
             </ContentList>
           </ContentLeftList>
+          <PaymentButton />
         </ContentLeftSide>
       </ContentWrapper>
 
