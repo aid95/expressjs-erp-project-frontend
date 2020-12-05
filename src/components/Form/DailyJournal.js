@@ -65,14 +65,180 @@ const DateTimeText = styled.span`
   font-size: 20px;
 `;
 
-const JournalItem = ({ taskId, categorys, journalText, start, end }) => {
+const JournalWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const EditTaskModal = (props) => {
+  // hooks
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [content, setContent] = useState("");
+  const [mainCategory, setMainCategory] = useState("");
+  const [middleCategory, setMiddleCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+
+  // Apollo client
+  // Query
+  const resultMainCategories = useQuery(MAIN_CATEGORIES, {
+    fetchPolicy: "network-only",
+  });
+  const [queryMiddleCategories, resultMiddleCategories] = useLazyQuery(
+    SUB_CATEGORIES,
+    {
+      variables: { parentCategoryId: mainCategory },
+      fetchPolicy: "network-only",
+    }
+  );
+  const [querySubCategories, resultSubCategories] = useLazyQuery(
+    SUB_CATEGORIES,
+    {
+      variables: { parentCategoryId: middleCategory },
+      fetchPolicy: "network-only",
+    }
+  );
+  // Mutation
+  const [editTaskMutation] = useMutation(EDIT_TASK, {
+    variables: {
+      id: props.taskId,
+      comment: content,
+      beginDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
+      action: "EDIT",
+    },
+    onCompleted: (d) => {
+      if (!d) {
+        toast.error("업무 내용이 잘못되었습니다.");
+      }
+    },
+  });
+
+  useQuery(SEE_TASK, {
+    variables: {
+      id: props.taskId,
+    },
+    onCompleted: (d) => {
+      if (d.seeTask === null) return;
+      const {
+        seeTask: { id, comment, beginDateTime, endDateTime },
+      } = d;
+      setContent(comment);
+      setStartDate(new Date(beginDateTime));
+      setEndDate(new Date(endDateTime));
+    },
+    fetchPolicy: "network-only",
+  });
+
+  const cancelClick = (e) => {
+    setContent("");
+    props.onHide();
+  };
+  const completeClick = async (e) => {
+    if (content !== "" && startDate < endDate) {
+      try {
+        await editTaskMutation();
+        cancelClick();
+      } catch (e) {
+        toast.error("업무 시간이 중첩되었습니다.");
+      }
+    } else {
+      toast.error("업무 내용이 잘못되었습니다.");
+    }
+  };
+
+  useMemo(() => {
+    queryMiddleCategories();
+  }, [mainCategory]);
+  const onMainCategoryChange = (e) => {
+    setMainCategory(e);
+    setSubCategory("");
+  };
+  useMemo(() => {
+    querySubCategories();
+  }, [middleCategory]);
+  const onMiddleCategoryChange = (e) => {
+    setMiddleCategory(e);
+  };
+  const onSubCategoryChange = (e) => {
+    setSubCategory(e);
+  };
+
+  return (
+    !resultMainCategories.loading && (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            💻 업무 내용 수정
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ModalContainer>
+            <ModalInputWrapper width={50}>
+              <ModalInputCaption>업무 내용</ModalInputCaption>
+              <input
+                value={content}
+                onChange={(event) => setContent(event.target.value)}
+              />
+            </ModalInputWrapper>
+            <ModalInputWrapper width={30}>
+              <ModalInputCaption>시작 시간</ModalInputCaption>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                timeCaption="time"
+                dateFormat="MMMM d, yyyy h:mm aa"
+              />
+            </ModalInputWrapper>
+            <ModalInputWrapper width={30}>
+              <ModalInputCaption>종료 시간</ModalInputCaption>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                timeCaption="time"
+                dateFormat="MMMM d, yyyy h:mm aa"
+              />
+            </ModalInputWrapper>
+          </ModalContainer>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color={"secondary"} onClick={cancelClick}>
+            취소
+          </Button>
+          <Button color={"primary"} onClick={completeClick}>
+            저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  );
+};
+
+const JournalItem = ({
+  taskId,
+  editModal,
+  categorys,
+  journalText,
+  start,
+  end,
+}) => {
   const startDate = format(new Date(start), "HH:mm");
   const endDate = format(new Date(end), "HH:mm");
   const subCategory = categorys || "-";
   const middleCategory = subCategory.parentCategory || "-";
   const mainCategory = middleCategory.parentCategory || "-";
-
-  const [modalShow, setModalShow] = React.useState(false);
 
   const [deleteTaskMutation] = useMutation(EDIT_TASK, {
     variables: {
@@ -88,17 +254,27 @@ const JournalItem = ({ taskId, categorys, journalText, start, end }) => {
           <Categories>
             {mainCategory.title} > {middleCategory.title} > {subCategory.title}
           </Categories>
-          <JournalText>{journalText}</JournalText>
-          <JournalMenu>
-            <JournalMenuItem
-              id={taskId}
-              onClick={async () => {
-                await deleteTaskMutation();
-              }}
-            >
-              삭제
-            </JournalMenuItem>
-          </JournalMenu>
+          <JournalWrapper>
+            <JournalText>{journalText}</JournalText>
+            <JournalMenu>
+              <JournalMenuItem
+                id={taskId}
+                onClick={async (e) => {
+                  editModal(e.target.id);
+                }}
+              >
+                수정
+              </JournalMenuItem>
+              <JournalMenuItem
+                id={taskId}
+                onClick={async () => {
+                  await deleteTaskMutation();
+                }}
+              >
+                삭제
+              </JournalMenuItem>
+            </JournalMenu>
+          </JournalWrapper>
         </JournalInfoWrapper>
       </ContentTableCell>
       <ContentCenterTableCell cellWidth={20}>
@@ -392,6 +568,13 @@ const NewTaskModal = (props) => {
 const DailyJournal = ({ data, setter }) => {
   const { id, createdAt, tasks } = data;
   const [newTaskModalShow, setNewTaskModalShow] = useState(false);
+  const [editTaskId, setEditTaskId] = useState("");
+  const [editTaskModalShow, setEditTaskModalShow] = useState(false);
+
+  const seletedEditTask = (id) => {
+    setEditTaskId(id);
+    setEditTaskModalShow(true);
+  };
 
   return (
     <Container>
@@ -414,6 +597,7 @@ const DailyJournal = ({ data, setter }) => {
         {tasks.map((task) => (
           <JournalItem
             taskId={task.id}
+            editModal={seletedEditTask}
             categorys={task.category}
             journalText={task.comment}
             start={task.beginDateTime}
@@ -431,6 +615,13 @@ const DailyJournal = ({ data, setter }) => {
           onHide={() => {
             setNewTaskModalShow(false);
             setter(id);
+          }}
+        />
+        <EditTaskModal
+          taskId={editTaskId}
+          show={editTaskModalShow}
+          onHide={() => {
+            setEditTaskModalShow(false);
           }}
         />
       </ContentFooter>
