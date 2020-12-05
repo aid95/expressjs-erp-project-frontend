@@ -163,6 +163,8 @@ const DeptDetail = ({ id }) => {
   const classes = useStyles();
 
   const [replyMailModalShow, setReplyMailModalShow] = useState(false);
+  const [deptUsers, setDeptUsers] = useState([]);
+
   const [deleteDeptMutation] = useMutation(EDIT_DEPT, {
     variables: {
       id,
@@ -182,6 +184,9 @@ const DeptDetail = ({ id }) => {
       id,
     },
     fetchPolicy: "network-only",
+    onCompleted: (d) => {
+      setDeptUsers(d.deptUsers);
+    },
   });
 
   return (
@@ -204,7 +209,7 @@ const DeptDetail = ({ id }) => {
             </DeptDetailWrapper>
             <UsersDetailWrapper>
               <List dense className={classes.root}>
-                {users.data.deptUsers.map((user, index) => {
+                {deptUsers.map((user, index) => {
                   const labelId = `checkbox-list-secondary-label-${index}`;
                   return (
                     <ListItem key={user.id} button>
@@ -217,6 +222,7 @@ const DeptDetail = ({ id }) => {
                       <ListItemText
                         id={labelId}
                         primary={`${user.fullName} @${user.username} ${
+                          dept.data.seeDepartment.leaderUser !== null &&
                           user.id === dept.data.seeDepartment.leaderUser.id
                             ? "👑"
                             : ""

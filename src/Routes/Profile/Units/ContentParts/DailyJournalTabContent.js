@@ -13,7 +13,7 @@ import {
   SEE_DAILY_JOURNALS,
   SEE_FULL_DAILY_JOURNAL,
 } from "../../ProfileQueries";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   ContentList,
