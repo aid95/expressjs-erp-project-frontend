@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import ProfileHeaderUnit from "./Units/ProfileHeaderUnit";
@@ -9,6 +9,8 @@ import { PayStubTabContent } from "./Units/ContentParts/PayStubTabContent";
 import { ChatContent } from "./Units/ContentParts/ChatTabContent";
 import { HRTabContent } from "./Units/ContentParts/HRTabContent";
 import { DeptTabContent } from "./Units/ContentParts/DeptTabContent";
+import { useQuery } from "@apollo/client";
+import { ME } from "../../SharedQueries";
 
 const Container = styled.div`
   width: 100%;
@@ -43,7 +45,16 @@ const SubMenuLink = styled.a`
 `;
 
 const ProfilePresenter = ({ subMenuState }) => {
+  const [me, setMe] = useState([]);
+  useQuery(ME, {
+    onCompleted: (d) => {
+      setMe(d.me);
+    },
+  });
+
   const { setSubMenu, subMenu } = subMenuState;
+
+  console.log(me);
 
   return (
     <Container>
@@ -80,16 +91,22 @@ const ProfilePresenter = ({ subMenuState }) => {
               채팅
             </MenubarListItem>
           </SubMenuLink>
-          <SubMenuLink onClick={() => setSubMenu("hrMenu")}>
-            <MenubarListItem selected={subMenu === "hrMenu"}>
-              인사
-            </MenubarListItem>
-          </SubMenuLink>
-          <SubMenuLink onClick={() => setSubMenu("deptMenu")}>
-            <MenubarListItem selected={subMenu === "deptMenu"}>
-              부서
-            </MenubarListItem>
-          </SubMenuLink>
+          {me.rank && me.rank.title === "대표" ? (
+            <>
+              <SubMenuLink onClick={() => setSubMenu("hrMenu")}>
+                <MenubarListItem selected={subMenu === "hrMenu"}>
+                  인사
+                </MenubarListItem>
+              </SubMenuLink>
+              <SubMenuLink onClick={() => setSubMenu("deptMenu")}>
+                <MenubarListItem selected={subMenu === "deptMenu"}>
+                  부서
+                </MenubarListItem>
+              </SubMenuLink>
+            </>
+          ) : (
+            <></>
+          )}
         </MenubarList>
       </MenubarWrapper>
 
