@@ -93,6 +93,8 @@ export const SEE_FULL_DOC_APPROVAL = gql`
             title
           }
         }
+        approveDate
+        acceptComment
         isPass
       }
       createdAt

@@ -11,6 +11,10 @@ import {
 } from "../../Routes/Profile/Units/ContentParts/ContentStyles";
 import { ME } from "../../SharedQueries";
 import { gql } from "apollo-boost";
+import { withStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import { format } from "date-fns";
 
 const Container = styled.div`
   display: flex;
@@ -182,6 +186,16 @@ const ApprovalDocModal = (props) => {
   );
 };
 
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}))(Tooltip);
+
 const ApproveDoc = (data) => {
   const [approvalDocModal, setApprovalDocModal] = useState(false);
   const [action, setAction] = useState(true);
@@ -216,14 +230,36 @@ const ApproveDoc = (data) => {
       <ApproversWrapper>
         결재자&nbsp;:&nbsp;
         <ApproversList>
-          {approvers.map(({ id, approver, isPass }) => {
-            const { username } = approver;
-            return (
-              <ApproversItem id={id} key={id} isPass={isPass}>
-                {username}
-              </ApproversItem>
-            );
-          })}
+          {approvers.map(
+            ({ id, approver, acceptComment, approveDate, isPass }) => {
+              const { username } = approver;
+              if (isPass) {
+                return (
+                  <ApproversItem id={id} key={id} isPass={isPass}>
+                    <HtmlTooltip
+                      title={
+                        <React.Fragment>
+                          <Typography color="inherit">
+                            {username} -{" "}
+                            {format(new Date(approveDate), "yyyy-MM-dd HH:mm")}
+                          </Typography>
+                          {acceptComment}
+                        </React.Fragment>
+                      }
+                    >
+                      <div>{username}</div>
+                    </HtmlTooltip>
+                  </ApproversItem>
+                );
+              } else {
+                return (
+                  <ApproversItem id={id} key={id} isPass={isPass}>
+                    {username}
+                  </ApproversItem>
+                );
+              }
+            }
+          )}
         </ApproversList>
       </ApproversWrapper>
       <DocTitleWrapper>
