@@ -388,3 +388,18 @@ export const SEARCH_USER = gql`
     }
   }
 `;
+
+export const SEARCH_MAIL = gql`
+  query searchMail($term: String!) {
+    searchMail(term: $term) {
+      id
+      from {
+        username
+      }
+      subject
+      content
+      createdAt
+      isRead
+    }
+  }
+`;

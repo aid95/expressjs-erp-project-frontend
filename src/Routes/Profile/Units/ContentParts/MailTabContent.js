@@ -16,12 +16,18 @@ import {
   ContentList,
   ContentListItemComp,
 } from "../../../../Components/ContentList";
-import { SEE_FULL_MAIL, SEE_MAILS, SEND_MAIL } from "../../ProfileQueries";
+import {
+  SEARCH_MAIL,
+  SEE_FULL_MAIL,
+  SEE_MAILS,
+  SEND_MAIL,
+} from "../../ProfileQueries";
 import UserMessage from "../../../../Components/Form/UserMessage";
 import Modal from "react-bootstrap/Modal";
 import Button from "@material-ui/core/Button";
 import Badge from "@material-ui/core/Badge";
 import Input, { MultiLineInput } from "../../../../Components/Input";
+import MaterialInput from "@material-ui/core/Input";
 import useInput from "../../../../Hooks/useInput";
 import { UserSearchInput } from "../../../../Components/SearchInput";
 import { toast } from "react-toastify";
@@ -107,16 +113,29 @@ const NewMailButton = () => {
 
 export const MailContent = () => {
   const [selectedItemId, setSelectedItemId] = useState("");
+  const [mails, setMails] = useState([]);
   const [viewMail, setViewMail] = useState(false);
+  const [term, setTerm] = useState("");
 
   const [queryGetItems, resultGetItems] = useLazyQuery(SEE_MAILS, {
     pollInterval: POLL_INTERVAL,
     fetchPolicy: "network-only",
+    onCompleted: (d) => {
+      setMails(d.seeMail);
+    },
   });
 
   const [queryViewItem, resultViewItem] = useLazyQuery(SEE_FULL_MAIL, {
     variables: { id: selectedItemId },
     fetchPolicy: "network-only",
+  });
+
+  const [querySearchMail] = useLazyQuery(SEARCH_MAIL, {
+    variables: { term },
+    fetchPolicy: "network-only",
+    onCompleted: (d) => {
+      setMails(d.searchMail);
+    },
   });
 
   const onMailClick = async (e) => {
@@ -138,6 +157,15 @@ export const MailContent = () => {
     return () => {};
   }, [selectedItemId, queryViewItem]);
 
+  const onChangeSearchBar = async (e) => {
+    setTerm(e.target.value);
+    if (e.target.value !== "") {
+      await querySearchMail();
+    } else {
+      await queryGetItems();
+    }
+  };
+
   return (
     <ContentContainer>
       <Helmet>
@@ -147,33 +175,36 @@ export const MailContent = () => {
         <ContentLeftSide>
           <ContentLeftHeader>
             <ContentTitle>메일함</ContentTitle>
+            <MaterialInput
+              fullWidth
+              placeholder="검색하기"
+              inputProps={{ "aria-label": "description" }}
+              onChange={onChangeSearchBar}
+            />
           </ContentLeftHeader>
           <ContentLeftList>
             <ContentList>
-              {!resultGetItems.loading &&
-                resultGetItems.data &&
-                resultGetItems.data.seeMail &&
-                resultGetItems.data.seeMail.map((mail) => (
-                  <ContentListItemComp
-                    emoji={
-                      !mail.isRead ? (
-                        <Badge color={"secondary"} variant={"dot"}>
-                          📧
-                        </Badge>
-                      ) : (
-                        <>📧</>
-                      )
-                    }
-                    title={mail.subject}
-                    subtext={`@${mail.from.username} ${new Date(
-                      mail.createdAt
-                    ).toDateString()}`}
-                    key={mail.id}
-                    id={mail.id}
-                    onClick={onMailClick}
-                    isSelected={selectedItemId === mail.id}
-                  />
-                ))}
+              {mails.map((mail) => (
+                <ContentListItemComp
+                  emoji={
+                    !mail.isRead ? (
+                      <Badge color={"secondary"} variant={"dot"}>
+                        📧
+                      </Badge>
+                    ) : (
+                      <>📧</>
+                    )
+                  }
+                  title={mail.subject}
+                  subtext={`@${mail.from.username} ${new Date(
+                    mail.createdAt
+                  ).toDateString()}`}
+                  key={mail.id}
+                  id={mail.id}
+                  onClick={onMailClick}
+                  isSelected={selectedItemId === mail.id}
+                />
+              ))}
             </ContentList>
           </ContentLeftList>
           <NewMailButton />
