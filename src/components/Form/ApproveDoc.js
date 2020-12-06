@@ -214,6 +214,7 @@ const ApproveDoc = (data) => {
     },
   } = data;
   const me = useQuery(ME);
+  console.log(me, data);
 
   return (
     <Container>
@@ -279,35 +280,35 @@ const ApproveDoc = (data) => {
             setApprovalDocModal(false);
           }}
         />
-        {(!me.loading && state !== "DONE") ||
-          (state !== "REJECT" &&
-            me.data.me.id === currentApprover.approver.id && (
-              <DocFootList>
-                <DocFootListItem>
-                  <Button
-                    onClick={(event) => {
-                      setAction(true);
-                      setApprovalDocModal(true);
-                    }}
-                    variant="outlined"
-                  >
-                    결재 승인
-                  </Button>
-                </DocFootListItem>
-                <DocFootListItem>
-                  <Button
-                    onClick={(event) => {
-                      setAction(false);
-                      setApprovalDocModal(true);
-                    }}
-                    variant="outlined"
-                    color={"secondary"}
-                  >
-                    결재 반려
-                  </Button>
-                </DocFootListItem>
-              </DocFootList>
-            ))}
+        {!me.loading &&
+          state === "PENDING" &&
+          me.data.me.id === currentApprover.approver.id && (
+            <DocFootList>
+              <DocFootListItem>
+                <Button
+                  onClick={(event) => {
+                    setAction(true);
+                    setApprovalDocModal(true);
+                  }}
+                  variant="outlined"
+                >
+                  결재 승인
+                </Button>
+              </DocFootListItem>
+              <DocFootListItem>
+                <Button
+                  onClick={(event) => {
+                    setAction(false);
+                    setApprovalDocModal(true);
+                  }}
+                  variant="outlined"
+                  color={"secondary"}
+                >
+                  결재 반려
+                </Button>
+              </DocFootListItem>
+            </DocFootList>
+          )}
       </DocFootWrapper>
     </Container>
   );
