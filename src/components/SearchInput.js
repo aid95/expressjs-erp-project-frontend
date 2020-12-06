@@ -29,8 +29,8 @@ ord=${query}&confmKey=devU01TX0FVVEgyMDIwMTExODIxMzQxMDExMDQzNjU=&resultType=jso
             .then((response) => response.json())
             .then(({ results }) => {
               resolve(
-                results.juso.map(({ roadAddrPart1, roadAddrPart2 }) => ({
-                  value: `${roadAddrPart1} ${roadAddrPart2}`,
+                results.juso.map(({ roadAddrPart1, roadAddrPart2, zipNo }) => ({
+                  value: `${roadAddrPart1} ${roadAddrPart2} (${zipNo})`,
                   name: `${roadAddrPart1} ${roadAddrPart2}`,
                 }))
               );
