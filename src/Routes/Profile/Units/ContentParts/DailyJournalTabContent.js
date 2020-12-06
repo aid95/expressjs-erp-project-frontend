@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 import Input from "@material-ui/core/Input";
 import { gql } from "apollo-boost";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -112,6 +113,9 @@ export const DailyJournalContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>업무 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>

@@ -16,6 +16,7 @@ import {
 import { MY_SALARIES, SEE_PAYMENT_STUB } from "../../ProfileQueries";
 import PayStub from "../../../../Components/Form/PayStub";
 import { format } from "date-fns";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -50,6 +51,9 @@ export const PayStubTabContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>급여 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>

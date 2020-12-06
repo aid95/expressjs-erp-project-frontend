@@ -24,6 +24,7 @@ import useInput from "../../../../Hooks/useInput";
 import { toast } from "react-toastify";
 import { GET_DEPARTMENTS } from "../../../../SharedQueries";
 import DeptDetail from "../../../../Components/Form/DeptDetail";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -111,6 +112,9 @@ export const DeptTabContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>부서 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>

@@ -25,6 +25,7 @@ import Input, { MultiLineInput } from "../../../../Components/Input";
 import useInput from "../../../../Hooks/useInput";
 import { UserSearchInput } from "../../../../Components/SearchInput";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -139,6 +140,9 @@ export const MailContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>메일 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>

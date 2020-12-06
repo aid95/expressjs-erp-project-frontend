@@ -25,6 +25,7 @@ import { UserSearchInput } from "../../../../Components/SearchInput";
 import { toast } from "react-toastify";
 import { SEND_MESSAGE } from "../../../../SharedQueries";
 import ChatRoom from "../../../../Components/Form/ChatRoom";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -121,6 +122,9 @@ export const ChatContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>채팅 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>

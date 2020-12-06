@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { ME } from "../../../../SharedQueries";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -241,6 +242,9 @@ export const ApprovalDocContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>결재 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>

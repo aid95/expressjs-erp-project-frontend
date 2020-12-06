@@ -18,6 +18,7 @@ import { SEARCH_USER, SEE_USERS } from "../../ProfileQueries";
 import UserEdit from "../../../../Components/Form/UserEdit";
 import Input from "@material-ui/core/Input";
 import { gql } from "apollo-boost";
+import { Helmet } from "react-helmet-async";
 
 const POLL_INTERVAL = 2000;
 
@@ -92,6 +93,9 @@ export const HRTabContent = () => {
 
   return (
     <ContentContainer>
+      <Helmet>
+        <title>인사 | ERP Monitor</title>
+      </Helmet>
       <ContentWrapper>
         <ContentLeftSide>
           <ContentLeftHeader>
