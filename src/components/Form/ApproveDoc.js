@@ -214,7 +214,6 @@ const ApproveDoc = (data) => {
     },
   } = data;
   const me = useQuery(ME);
-  console.log(me, data);
 
   return (
     <Container>

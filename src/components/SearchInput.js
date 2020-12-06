@@ -101,7 +101,6 @@ export const DeptUserSearchInput = ({
     },
     fetchPolicy: "network-only",
     onCompleted: (d) => {
-      console.log(d);
       setUsers(d.searchDeptUser);
     },
   });

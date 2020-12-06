@@ -54,8 +54,6 @@ const ProfilePresenter = ({ subMenuState }) => {
 
   const { setSubMenu, subMenu } = subMenuState;
 
-  console.log(me);
-
   return (
     <Container>
       <Helmet>
