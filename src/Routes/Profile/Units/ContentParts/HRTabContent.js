@@ -67,6 +67,7 @@ export const HRTabContent = () => {
       deptName: term,
       beginDate: term,
     },
+    fetchPolicy: "network-only",
     onCompleted: (d) => setUsers(d.searchUser),
   });
 
