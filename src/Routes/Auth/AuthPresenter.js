@@ -9,6 +9,8 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
+import { Checkbox, FormControlLabel, withStyles } from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
 
 const Wrapper = styled.div`
   display: flex;
@@ -57,6 +59,16 @@ const W100KeyboardDatePicker = styled(KeyboardDatePicker)`
   width: 100%;
 `;
 
+const GreenCheckbox = withStyles({
+  root: {
+    color: green[400],
+    "&$checked": {
+      color: green[600],
+    },
+  },
+  checked: {},
+})((props) => <Checkbox color="default" {...props} />);
+
 const AuthPresenter = ({
   action,
   username,
@@ -70,6 +82,8 @@ const AuthPresenter = ({
   selectedDate,
   onSubmit,
   onDateChange,
+  onCheckBoxChange,
+  cookies,
 }) => (
   <MuiPickersUtilsProvider utils={MomentUtils}>
     <Wrapper>
@@ -82,6 +96,16 @@ const AuthPresenter = ({
             <form onSubmit={onSubmit}>
               <Input placeholder={"Username"} {...username} />
               <Input placeholder={"Password"} {...password} type="password" />
+              <FormControlLabel
+                control={
+                  <GreenCheckbox
+                    checked={cookies.auto_fill_flag === "yes"}
+                    onChange={onCheckBoxChange}
+                    name="checkedG"
+                  />
+                }
+                label={"계정 정보 저장"}
+              />
               <Button text={"Log in"} />
             </form>
           </>

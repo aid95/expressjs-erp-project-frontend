@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthPresenter from "./AuthPresenter";
 import useInput from "../../Hooks/useInput";
 import { useMutation } from "@apollo/client";
 import { LOG_IN, CREATE_ACCOUNT } from "./AuthQueries";
 import { toast } from "react-toastify";
 import { logUserIn } from "../../utils";
+import { useCookies } from "react-cookie";
 
 const AuthContainer = () => {
   const [action, setAction] = useState("logIn");
   const [address, setAddress] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "auto_fill_flag",
+    "auto_fill_username",
+    "auto_fill_password",
+  ]);
 
   const username = useInput("");
   const password = useInput("");
@@ -31,6 +37,24 @@ const AuthContainer = () => {
     },
   });
 
+  useEffect(() => {
+    if (cookies.auto_fill_flag === "yes") {
+      username.setValue(cookies.auto_fill_username);
+      password.setValue(cookies.auto_fill_password);
+    }
+    return () => {};
+  }, []);
+
+  const onCheckBoxChange = (e) => {
+    if (e.target.checked) {
+      setCookie("auto_fill_flag", "yes");
+    } else {
+      setCookie("auto_fill_flag", "no");
+      removeCookie("auto_fill_username");
+      removeCookie("auto_fill_password");
+    }
+  };
+
   const [logInMutation] = useMutation(LOG_IN, {
     variables: { username: username.value, password: password.value },
   });
@@ -49,6 +73,10 @@ const AuthContainer = () => {
           } = await logInMutation();
 
           if (token !== "" && token !== undefined) {
+            if (cookies.auto_fill_flag === "yes") {
+              setCookie("auto_fill_username", username.value);
+              setCookie("auto_fill_password", password.value);
+            }
             logUserIn(token);
           } else {
             throw Error();
@@ -102,6 +130,8 @@ const AuthContainer = () => {
       addressDetail={addressDetail}
       onSubmit={onSubmit}
       onDateChange={onDateChange}
+      onCheckBoxChange={onCheckBoxChange}
+      cookies={cookies}
     />
   );
 };

@@ -26,6 +26,7 @@ const Input = ({
   placeholder,
   required = true,
   value,
+  defaultValue,
   onChange,
   type = "text",
   className,
@@ -35,6 +36,7 @@ const Input = ({
     placeholder={placeholder}
     required={required}
     value={value}
+    defaultValue={defaultValue}
     onChange={onChange}
     type={type}
   />
@@ -44,6 +46,7 @@ Input.propTypes = {
   placeholder: PropTypes.string.isRequired,
   required: PropTypes.bool,
   value: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
 };
@@ -52,6 +55,7 @@ export const MultiLineInput = ({
   placeholder,
   required = true,
   value,
+  defaultValue,
   onChange,
   type = "text",
   className,
@@ -64,6 +68,7 @@ export const MultiLineInput = ({
     required={required}
     value={value}
     onChange={onChange}
+    defaultValue={defaultValue}
     type={type}
     col={col}
     row={row}
@@ -74,6 +79,7 @@ MultiLineInput.propTypes = {
   placeholder: PropTypes.string.isRequired,
   required: PropTypes.bool,
   value: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
   col: PropTypes.number,
